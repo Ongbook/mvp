@@ -1,20 +1,24 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-end">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<a class="navbar-brand" href="#">
 		Ongbook
 	</a>
 
-	<button class="navbar-toggler" type="button"
-	(click)="toggleNavbar()">
-	<span class="navbar-toggler-icon"></span>
-</button>
+	<button class="navbar-toggler" type="button" (click)="toggleNavbar()">
+		<span class="navbar-toggler-icon"></span>
+	</button>
 
-<div class="collapse navbar-collapse " [ngClass]="{ 'show': navbarOpen }">
-	<ul class="navbar-nav mr-auto ">
-		<li class="nav-item">
-			<a class="nav-link"  href="#" (click)="openModal(template)">Cadastrar ONG</a>
-		</li>
-	</ul>
-</div>
+	<div class="collapse navbar-collapse " [ngClass]="{ 'show': navbarOpen }">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
+				<a class="nav-link" href="#" (click)="openModal(template)">Cadastrar ONG</a>
+			</li>
+		</ul>
+		<!--<ul class="navbar-nav navbar-rigth">
+			<li class="nav-item">
+				<a class="nav-link" href="#" (click)="openModal(template)">Cadastrar ONG</a>
+			</li>
+		</ul>-->
+	</div>
 </nav>
 
 <app-maps>
@@ -23,43 +27,49 @@
 <ng-template #template>
 
 	<div class="modal-header">
-		<h4 class="modal-title pull-left">Cadastrar Entidade Social</h4>
-		<button type="button" class="close pull-right" 
-		aria-label="Close" (click)="modalRef.hide()">
-		<span aria-hidden="true">&times;</span>
-	</button>
-</div>
-<div class="modal-body">
-
-	
-	<div class="form-group">
-		<label for="cnpj">CNPJ</label>
-		<input type="text" class="form-control" id="cnpj" #cnpj >
+		<h5 class="modal-title pull-left">Cadastrar Entidade Social</h5>
 	</div>
 
+	<div class="modal-body">
+		<div class="input-group mb-3" *ngIf="!showMap">
+			<input type="text" id="cnpj" #cnpj class="form-control form-control-lg" placeholder="Digite o CNPJ" aria-describedby="basic-addon2">
+			<div class="input-group-append">
+				<button class="btn btn-primary" type="button" (click)="findCnpj(cnpj.value)">Buscar</button>
+			</div>
+		</div>
 
-	<div class="form-group" *ngIf="result">
-		<label for="fantasia">Nome Fantasia</label>
-		<input type="text" class="form-control" id="fantasia" value=" {{ fantasia }}">
+		<div class="form-group" *ngIf="result">
+			<input type="text" class="form-control form-control-sm" id="razao-social" value=" {{ razaoSocial }}" disabled>
+		</div>
+
+		<div class="form-group" *ngIf="result">
+			<input type="text" class="form-control" id="fantasia" value=" {{ fantasia }}">
+			<small class="form-text">Nome fantasia</small>
+		</div>
+
+		<div class="form-group" *ngIf="result">
+			<input type="email" class="form-control" id="email" value=" {{ email }}">
+			<small class="form-text">E-mail</small>
+		</div>
+
+		<div class="form-group" *ngIf="result">
+			<input type="text" class="form-control" id="area-atuacao" value=" {{ areaAtuacaoPrincipal }}">
+			<small class="form-text">Área de atuação</small>
+		</div>
+
+		<div *ngIf="showMap" style="height: 180px;">
+			<app-mapa-cadastro [lat]="lat" [lng]="lng"></app-mapa-cadastro>
+		</div>
+
+		<a href="#" *ngIf="!showMap"><small>Não tenho CNPJ</small></a>
+
 	</div>
 
-	<div class="form-group" *ngIf="result">
-		<label for="email">Email</label>
-		<input type="text" class="form-control" id="email" value=" {{ email }}">
+	<div class="modal-footer" *ngIf="showMap">
+
+		<!-- <button type="button" class="btn btn-primary" *ngIf="!showMap" (click)="findCnpj(cnpj.value)">Buscar</button> -->
+		<button type="button" class="btn btn-light" *ngIf="showMap" data-dismiss="modal" (click)="modalRef.hide()">Cancelar</button>
+		<button type="submit" class="btn btn-success" *ngIf="showMap">Confirmar</button>
 	</div>
-
-	<div *ngIf="showMap" style="height: 220px;">
-		<app-mapa-cadastro [lat]="lat" [lng]="lng"></app-mapa-cadastro>
-	</div>
-
-</div>
-
-<div class="modal-footer">
-	<a href="#" *ngIf="!showMap"> Não tenho CNPJ </a>
-	<button type="button" class="btn btn-primary" *ngIf="!showMap" (click)="findCnpj(cnpj.value)">Buscar</button>
-	<button type="button" class="btn btn-light" *ngIf="showMap" data-dismiss="modal">Cancelar</button>
-	<button type="submit" class="btn btn-success" *ngIf="showMap">Confirmar</button>
-</div>
 
 </ng-template>
-
