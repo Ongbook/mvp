@@ -1,16 +1,42 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule }   from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+import { BuscaCnpjService } from './busca-cnpj.service';
+import { BuscaLatLngService } from './busca-lat-lng.service';
+
+import { AgmCoreModule } from '@agm/core';
+
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
+import { MapsComponent } from './maps/maps.component';
+import { MapaCadastroComponent } from './mapa-cadastro/mapa-cadastro.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+  AppComponent,
+  HomeComponent,
+  MapsComponent,
+  MapaCadastroComponent
   ],
   imports: [
-    BrowserModule
+  BrowserModule,
+  FormsModule,
+  HttpClientModule,
+  BsDropdownModule.forRoot(),
+  TooltipModule.forRoot(),
+  ModalModule.forRoot(),
+  AgmCoreModule.forRoot({
+    apiKey: 'AIzaSyAfTxzWAW7ExaxT4-Sa7o7MxXPeiY6656A',
+    libraries: ['places']
+  })
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [ BuscaCnpjService, BuscaLatLngService ],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

@@ -1,0 +1,65 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-end">
+	<a class="navbar-brand" href="#">
+		Ongbook
+	</a>
+
+	<button class="navbar-toggler" type="button"
+	(click)="toggleNavbar()">
+	<span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse " [ngClass]="{ 'show': navbarOpen }">
+	<ul class="navbar-nav mr-auto ">
+		<li class="nav-item">
+			<a class="nav-link"  href="#" (click)="openModal(template)">Cadastrar ONG</a>
+		</li>
+	</ul>
+</div>
+</nav>
+
+<app-maps>
+</app-maps>
+
+<ng-template #template>
+
+	<div class="modal-header">
+		<h4 class="modal-title pull-left">Cadastrar Entidade Social</h4>
+		<button type="button" class="close pull-right" 
+		aria-label="Close" (click)="modalRef.hide()">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+<div class="modal-body">
+
+	
+	<div class="form-group">
+		<label for="cnpj">CNPJ</label>
+		<input type="text" class="form-control" id="cnpj" #cnpj >
+	</div>
+
+
+	<div class="form-group" *ngIf="result">
+		<label for="fantasia">Nome Fantasia</label>
+		<input type="text" class="form-control" id="fantasia" value=" {{ fantasia }}">
+	</div>
+
+	<div class="form-group" *ngIf="result">
+		<label for="email">Email</label>
+		<input type="text" class="form-control" id="email" value=" {{ email }}">
+	</div>
+
+	<div *ngIf="showMap" style="height: 220px;">
+		<app-mapa-cadastro [lat]="lat" [lng]="lng"></app-mapa-cadastro>
+	</div>
+
+</div>
+
+<div class="modal-footer">
+	<a href="#" *ngIf="!showMap"> Não tenho CNPJ </a>
+	<button type="button" class="btn btn-primary" *ngIf="!showMap" (click)="findCnpj(cnpj.value)">Buscar</button>
+	<button type="button" class="btn btn-light" *ngIf="showMap" data-dismiss="modal">Cancelar</button>
+	<button type="submit" class="btn btn-success" *ngIf="showMap">Confirmar</button>
+</div>
+
+</ng-template>
+
