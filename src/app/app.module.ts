@@ -3,6 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule }   from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { environment } from '../environments/environment';
+
 import { BuscaCnpjService } from './busca-cnpj.service';
 import { BuscaLatLngService } from './busca-lat-lng.service';
 
@@ -34,7 +38,9 @@ import { MapaCadastroComponent } from './mapa-cadastro/mapa-cadastro.component';
   AgmCoreModule.forRoot({
     apiKey: 'AIzaSyAfTxzWAW7ExaxT4-Sa7o7MxXPeiY6656A',
     libraries: ['places']
-  })
+  }),
+  AngularFireDatabaseModule,
+  AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [ BuscaCnpjService, BuscaLatLngService ],
   bootstrap: [ AppComponent ]

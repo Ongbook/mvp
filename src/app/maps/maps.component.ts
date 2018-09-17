@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'app-maps',
@@ -6,50 +8,47 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./maps.component.css']
 })
 export class MapsComponent implements OnInit {
- // google maps zoom level
- zoom: number = 4;
+   // google maps zoom level
+   zoom: number = 4;
 
-  // initial center position for the map
-  //lat: number = -12.81129062;
-  //lng: number = -51.37413716;
+   lat: number =  -19.82519036;
+   lng: number = -40.65804826;
 
-  lat: number =  -19.82519036;
-  lng: number = -40.65804826;
+   entidades: Observable<{}>;
 
-  markers: marker[] = [
-  {
-  	lat: -19.82519036,
-  	lng: -40.65804826,
-  	label: '',
-  	draggable: false
-  }
-  ]
+   markers: marker[] = [];
 
-  constructor() { }
+   constructor(public db: AngularFireDatabase) { 
 
-  ngOnInit() {
-  	//http.get("api.ongbook.org/ongs")
-  }
-
-  clickedMarker(label: string, index: number) {
-  	console.log(`clicked the marker: ${label || index}`);
-  }
-  
-  /*mapClicked($event: MouseEvent) {
-
-  	this.markers.push({
-  		lat: $event.coords.lat,
-  		lng: $event.coords.lng,
-  		draggable: true
-  	});
-  }*/
-  
-  markerDragEnd(m: marker, $event: MouseEvent) {
-  	console.log('dragEnd', m, $event);
-  }
+     this.entidades = db.list('entidades').valueChanges();
 
 
-}
+
+
+     this.entidades.subscribe(data => {
+
+       for (let i = 0; i < data.length; i++) {
+
+         this.markers.push({
+           lat: data[i].geo.lat,
+           lng: data[i].geo.lng,
+           dados: data[i].receita,
+           draggable: false
+         });
+
+       }
+     }); 
+
+   }
+
+   ngOnInit() {}
+
+
+   clickedMarker(label: string, index: number) {
+     console.log(`clicked the marker: ${label || index}`);
+   }
+
+ }
 
 // just an interface for type safety.
 interface marker {
@@ -57,4 +56,5 @@ interface marker {
 	lng: number;
 	label?: string;
 	draggable: boolean;
+  dados?: {};
 }
