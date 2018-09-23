@@ -1,0 +1,27 @@
+
+<agm-map 
+  [latitude]="lat"
+  [longitude]="lng"
+  [zoom]="zoom"
+  [disableDefaultUI]="false"
+  [zoomControl]="false">
+
+  <agm-marker 
+      *ngFor="let m of markers; let i = index"
+      (markerClick)="clickedMarker(m.label, i)"
+      [latitude]="m.lat"
+      [longitude]="m.lng"
+      [label]="m.label"
+      [markerDraggable]="m.draggable">
+      
+    <agm-info-window>
+      <strong>{{m.lat}}</strong><br/>
+      <strong>{{m.lng}}</strong><br/>
+      <strong>{{m.dados.cnpj}}</strong><br/>
+
+    </agm-info-window>
+    
+  </agm-marker>
+  
+
+</agm-map>

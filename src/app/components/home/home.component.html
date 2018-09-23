@@ -1,0 +1,81 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<a class="navbar-brand" href="#">
+		Ongbook
+	</a>
+
+	<button class="navbar-toggler" type="button" (click)="toggleNavbar()">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<div class="collapse navbar-collapse " [ngClass]="{ 'show': navbarOpen }">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
+				<a class="nav-link" href="#" *ngIf="!salvo" (click)="openModal(template)">Cadastrar ONG</a>
+			</li>
+		</ul>
+		<!--<ul class="navbar-nav navbar-rigth">
+			<li class="nav-item">
+				<a class="nav-link" href="#" (click)="openModal(template)">Cadastrar ONG</a>
+			</li>
+		</ul>-->
+	</div>
+</nav>
+
+<app-mapa>
+</app-mapa>
+
+<button type="button" class="btn btn-primary" (click)="emailTeste()">Email</button>
+
+<ng-template #template>
+
+	<div class="modal-header">
+		<h5 class="modal-title pull-left">Cadastrar Entidade Social</h5>
+	</div>
+
+<form #form="ngForm" (ngSubmit)="onSubmit(form)" novalidate>
+
+	<div class="modal-body">
+		<div class="input-group form-group mb-3" *ngIf="!showMap">
+			<input type="text" id="cnpj" ngModel="{{cnpj}}" name="cnpj" #busca class="form-control form-control-lg" placeholder="Digite o CNPJ" aria-describedby="basic-addon2">
+			<div class="input-group-append">
+				<button class="btn btn-primary" type="button" (click)="findCnpj(busca.value)">Buscar</button>
+			</div>
+		</div>
+
+		<div class="form-group" *ngIf="result">
+			<input type="text" ngModel="{{razaoSocial}} " name="razaoSocial" class="form-control form-control-sm" id="razao-social" disabled>
+		</div>
+
+		<div class="form-group" *ngIf="result">
+			<input type="text" ngModel="{{fantasia}}" name="fantasia" class="form-control" id="fantasia" >
+			<small class="form-text">Nome fantasia</small>
+		</div>
+
+		<div class="form-group" *ngIf="result">
+			<input type="email" ngModel="{{email}}" name="email" class="form-control" id="email">
+			<small class="form-text">E-mail</small>
+		</div>
+
+		<div class="form-group" *ngIf="result">
+			<input type="text" ngModel="{{areaAtuacaoPrincipal}}" name="areaAtuacaoPrincipal" class="form-control" id="area-atuacao" >
+			<small class="form-text">Área de atuação</small>
+		</div>
+
+		<div *ngIf="showMap" style="height: 180px;">
+			<app-mapa-cadastro [lat]="lat" [lng]="lng"></app-mapa-cadastro>
+		</div>
+
+		<a href="#" *ngIf="!showMap"><small>Não tenho CNPJ</small></a>
+
+	</div>
+
+	<div class="modal-footer" *ngIf="showMap">
+
+		<!-- <button type="button" class="btn btn-primary" *ngIf="!showMap" (click)="findCnpj(cnpj.value)">Buscar</button> -->
+		<button type="button" class="btn btn-light" *ngIf="showMap" (click)="modalRef.hide()">Cancelar</button>
+		<button type="submit" class="btn btn-success" *ngIf="showMap" >Confirmar</button>
+	</div>
+
+</form>
+
+</ng-template>

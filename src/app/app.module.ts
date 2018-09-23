@@ -7,8 +7,9 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { environment } from '../environments/environment';
 
-import { BuscaCnpjService } from './busca-cnpj.service';
-import { BuscaLatLngService } from './busca-lat-lng.service';
+import { BuscaCnpjService } from './services/busca-cnpj.service';
+import { BuscaLatLngService } from './services/busca-lat-lng.service';
+import { EnviaEmailService } from './services/envia-email.service';
 
 import { AgmCoreModule } from '@agm/core';
 
@@ -17,15 +18,15 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { MapsComponent } from './maps/maps.component';
-import { MapaCadastroComponent } from './mapa-cadastro/mapa-cadastro.component';
+import { HomeComponent } from './components/home/home.component';
+import { MapaComponent } from './components/mapa/mapa.component';
+import { MapaCadastroComponent } from './components/mapa-cadastro/mapa-cadastro.component';
 
 @NgModule({
   declarations: [
   AppComponent,
   HomeComponent,
-  MapsComponent,
+  MapaComponent,
   MapaCadastroComponent
   ],
   imports: [
@@ -42,7 +43,7 @@ import { MapaCadastroComponent } from './mapa-cadastro/mapa-cadastro.component';
   AngularFireDatabaseModule,
   AngularFireModule.initializeApp(environment.firebase)
   ],
-  providers: [ BuscaCnpjService, BuscaLatLngService ],
+  providers: [ BuscaCnpjService, BuscaLatLngService, EnviaEmailService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
