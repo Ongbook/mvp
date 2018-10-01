@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AngularFireModule } from '@angular/fire';
@@ -9,6 +9,7 @@ import { environment } from '../environments/environment';
 
 import { BuscaCnpjService } from './busca-cnpj.service';
 import { BuscaLatLngService } from './busca-lat-lng.service';
+import { EnviaEmailService } from './envia-email.service';
 
 import { AgmCoreModule } from '@agm/core';
 
@@ -23,26 +24,26 @@ import { MapaCadastroComponent } from './mapa-cadastro/mapa-cadastro.component';
 
 @NgModule({
   declarations: [
-  AppComponent,
-  HomeComponent,
-  MapsComponent,
-  MapaCadastroComponent
+    AppComponent,
+    HomeComponent,
+    MapsComponent,
+    MapaCadastroComponent
   ],
   imports: [
-  BrowserModule,
-  FormsModule,
-  HttpClientModule,
-  BsDropdownModule.forRoot(),
-  TooltipModule.forRoot(),
-  ModalModule.forRoot(),
-  AgmCoreModule.forRoot({
-    apiKey: 'AIzaSyAfTxzWAW7ExaxT4-Sa7o7MxXPeiY6656A',
-    libraries: ['places']
-  }),
-  AngularFireDatabaseModule,
-  AngularFireModule.initializeApp(environment.firebase)
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    BsDropdownModule.forRoot(),
+    TooltipModule.forRoot(),
+    ModalModule.forRoot(),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyAfTxzWAW7ExaxT4-Sa7o7MxXPeiY6656A',
+      libraries: ['places']
+    }),
+    AngularFireDatabaseModule,
+    AngularFireModule.initializeApp(environment.firebase)
   ],
-  providers: [ BuscaCnpjService, BuscaLatLngService ],
-  bootstrap: [ AppComponent ]
+  providers: [BuscaCnpjService, BuscaLatLngService, EnviaEmailService],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

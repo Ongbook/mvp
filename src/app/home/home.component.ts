@@ -1,23 +1,26 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import {NgForm} from '@angular/forms';
+import { NgForm } from '@angular/forms';
 
 import { AngularFireDatabase } from '@angular/fire/database';
 
 import { BuscaCnpjService } from '../busca-cnpj.service';
 import { BuscaLatLngService } from '../busca-lat-lng.service';
+import { EnviaEmailService } from '../envia-email.service';
 
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.css']
 })
+
 export class HomeComponent implements OnInit {
+
 	navbarOpen = false;
 
 	cnpj: any;
-	areaAtuacaoPrincipal: string;
+	atividadePrincipal: string;
 	razaoSocial: string;
 	fantasia: string;
 	email: string;
@@ -29,14 +32,18 @@ export class HomeComponent implements OnInit {
 
 	public modalRef: BsModalRef;
 
-	constructor(private modalService: BsModalService, private BuscaCnpjService: BuscaCnpjService, 
-		private BuscaLatLngService: BuscaLatLngService, private db: AngularFireDatabase) { }
+	constructor(private modalService: BsModalService, private BuscaCnpjService: BuscaCnpjService,
+		private BuscaLatLngService: BuscaLatLngService, private db: AngularFireDatabase, private EnviaEmailService: EnviaEmailService) { }
 
 	ngOnInit() {
 	}
 
 	public openModal(template: TemplateRef<any>) {
 		this.modalRef = this.modalService.show(template);
+	}
+
+	enviaEmail() {
+		this.EnviaEmailService.sendEmail();
 	}
 
 	findCnpj(value) {
@@ -54,7 +61,7 @@ export class HomeComponent implements OnInit {
 
 			this.result = true;
 
-			this.areaAtuacaoPrincipal = res['atividade_principal'][0].text;
+			this.atividadePrincipal = res['atividade_principal'][0].text;
 			this.razaoSocial = res['nome'];
 			this.fantasia = res['fantasia'];
 			this.email = res['email'];
@@ -87,7 +94,6 @@ export class HomeComponent implements OnInit {
 
 	onSubmit(form: NgForm) {
 
-
 		let geo = JSON.parse(localStorage.getItem("geocode"));
 
 		let receita = JSON.parse(localStorage.getItem("dadosReceita"));
@@ -101,9 +107,11 @@ export class HomeComponent implements OnInit {
 		};
 
 
-		this.db.list('/entidades').push({ geo: geo,
+		this.db.list('/entidades').push({
+			geo: geo,
 			receita: receita,
-			form: f });
+			form: f
+		});
 
 		console.log('## onsubmit ##');
 

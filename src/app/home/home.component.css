@@ -1,0 +1,17 @@
+button.navbar-toggler {
+  border: none;
+  outline: none;
+}
+
+span.brand-title {
+  color: white;
+  font-weight: bold;
+  font-size: 22px;
+}
+
+@media (min-width: 992px) {
+  .navbar-nav .nav-link {
+      padding-right: 1rem;
+      padding-left: 1rem;
+  }
+}
