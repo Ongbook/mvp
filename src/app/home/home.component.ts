@@ -106,7 +106,7 @@ export class HomeComponent implements OnInit {
 			form: f
 		};
 
-
+		// gravando no database firebase
 		this.db.list('/entidades').push({
 			geo: geo,
 			receita: receita,
@@ -120,6 +120,5 @@ export class HomeComponent implements OnInit {
 		this.salvo = true;
 
 	}
-
 
 }

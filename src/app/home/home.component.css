@@ -9,6 +9,34 @@ span.brand-title {
   font-size: 22px;
 }
 
+.form-group {
+  margin-bottom: 10px;
+}
+
+.edit-register{
+  font-weight: bold;
+}
+
+#fantasia{
+  text-transform: uppercase;
+}
+
+#email{
+  text-transform: lowercase;
+}
+
+#area-atuacao{
+  text-transform: capitalize;
+}
+
+
+small.form-text {
+  margin-top: 0px;
+  color: gray;
+  font-weight: lighter;
+  margin-left: 2px;
+}
+
 @media (min-width: 992px) {
   .navbar-nav .nav-link {
       padding-right: 1rem;

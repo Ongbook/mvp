@@ -12,6 +12,7 @@ import { BuscaLatLngService } from './busca-lat-lng.service';
 import { EnviaEmailService } from './envia-email.service';
 
 import { AgmCoreModule } from '@agm/core';
+import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -40,6 +41,7 @@ import { MapaCadastroComponent } from './mapa-cadastro/mapa-cadastro.component';
       apiKey: 'AIzaSyAfTxzWAW7ExaxT4-Sa7o7MxXPeiY6656A',
       libraries: ['places']
     }),
+    AgmJsMarkerClustererModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
