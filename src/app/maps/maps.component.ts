@@ -7,7 +7,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 @Component({
   selector: 'app-maps',
   templateUrl: './maps.component.html',
-  styleUrls: ['./maps.component.css']
+  styleUrls: ['./maps.component.scss']
 })
 export class MapsComponent implements OnInit {
   // google maps zoom level
@@ -33,6 +33,7 @@ export class MapsComponent implements OnInit {
           this.dataResponse.push(data[key]);
         }
       }
+      localStorage.setItem('listagem_completa', JSON.stringify(data));
 
       for (let i = 0; i < this.dataResponse.length; i++) {
         this.markers.push({
@@ -42,7 +43,6 @@ export class MapsComponent implements OnInit {
           draggable: false
         });
       }
-      console.log(data);
     });
   }
 
@@ -62,7 +62,6 @@ export class MapsComponent implements OnInit {
 interface marker {
   lat: number;
   lng: number;
-  label?: string;
   draggable: boolean;
   dados?: {};
 }

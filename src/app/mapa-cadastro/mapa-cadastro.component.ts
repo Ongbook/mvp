@@ -3,7 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 @Component({
 	selector: 'app-mapa-cadastro',
 	templateUrl: './mapa-cadastro.component.html',
-	styleUrls: ['./mapa-cadastro.component.css']
+	styleUrls: ['./mapa-cadastro.component.scss']
 })
 export class MapaCadastroComponent implements OnInit {
 	// google maps zoom level
