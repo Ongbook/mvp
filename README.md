@@ -1,3 +1,6 @@
+[![dependencies Status](https://david-dm.org/Ongbook/mvp/status.svg)](https://david-dm.org/Ongbook/mvp)
+[![NodeJS](https://img.shields.io/badge/node-v10.11.0-brightgreen.svg)](#prerequisites)
+
 # Ongbook
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.1.
