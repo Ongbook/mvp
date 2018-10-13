@@ -1,7 +1,7 @@
 [![dependencies Status](https://david-dm.org/Ongbook/mvp/status.svg)](https://david-dm.org/Ongbook/mvp)
 [![NodeJS](https://img.shields.io/badge/node-v10.11.0-brightgreen.svg)](#prerequisites)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
-
+[![TypeScript](https://badges.frapsoft.com/typescript/love/typescript.png?v=101)](https://github.com/ellerbrock/typescript-badges/)
 # Ongbook
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.1.
