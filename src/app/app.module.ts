@@ -22,13 +22,15 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { MapsComponent } from './maps/maps.component';
 import { MapaCadastroComponent } from './mapa-cadastro/mapa-cadastro.component';
+import { ModalEntityProfileComponent } from './maps/modal-entity-profile/modal-entity-profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     MapsComponent,
-    MapaCadastroComponent
+    MapaCadastroComponent,
+    ModalEntityProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -46,6 +48,9 @@ import { MapaCadastroComponent } from './mapa-cadastro/mapa-cadastro.component';
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [BuscaCnpjService, BuscaLatLngService, EnviaEmailService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    ModalEntityProfileComponent
+  ]
 })
 export class AppModule { }

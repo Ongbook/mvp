@@ -17,9 +17,8 @@
         [iconUrl]="iconUrl">
 
       <agm-info-window>
-        <h6 style="max-width:300px;"><a href="#" (click)="openModal(entityProfileDetails)">{{m.dados.fantasia}}</a></h6>
+        <h6 style="max-width:300px;"><a href="#" (click)="openModalEntityProfile(i)">{{m.dados.fantasia}}</a></h6>
         <p style="max-width:300px;"><strong>{{m.dados.atividade_principal[0].text}}</strong></p>
-        <!-- <p><small><a href="#" (click)="openModal(entityProfileDetails)">Saiba mais...</a></small></p> -->
       </agm-info-window>
 
     </agm-marker>
@@ -27,7 +26,3 @@
   </agm-marker-cluster>
 
 </agm-map>
-
-<ng-template #entityProfileDetails>
-  <h1>Oi Modaal =)</h1>
-</ng-template>

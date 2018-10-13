@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	public openModal(template: TemplateRef<any>) {
-		this.modalRef = this.modalService.show(template);
+		this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
 	}
 
 	enviaEmail() {
