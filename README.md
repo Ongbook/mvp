@@ -1,5 +1,4 @@
 [![dependencies Status](https://david-dm.org/Ongbook/mvp/status.svg)](https://david-dm.org/Ongbook/mvp)
-
 [![NodeJS](https://img.shields.io/badge/node-v10.11.0-brightgreen.svg)](#prerequisites)
 
 # Ongbook
