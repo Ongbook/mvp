@@ -38,8 +38,8 @@ export class HomeComponent implements OnInit {
 	ngOnInit() {
 	}
 
-	public openModal(template: TemplateRef<any>) {
-		this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
+	public openModalEntityRegister(templateEntityRegister: TemplateRef<any>) {
+		this.modalRef = this.modalService.show(templateEntityRegister, { backdrop: 'static', keyboard: false });
 	}
 
 	enviaEmail() {
