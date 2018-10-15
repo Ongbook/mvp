@@ -26,8 +26,8 @@
     "bootstrap": "^4.1.3",
     "core-js": "^2.5.4",
     "firebase": "^5.5.0",
+    "jquery": "^3.3.1",
     "js-marker-clusterer": "^1.0.0",
-    "jquery": "1.9.1 - 3",
     "ngx-bootstrap": "^3.0.1",
     "rxjs": "^6.0.0",
     "zone.js": "~0.8.26"
