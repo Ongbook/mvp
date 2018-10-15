@@ -10,7 +10,11 @@
 		</button>
 
 		<div class="collapse navbar-collapse" [ngClass]="{ 'show': navbarOpen }">
-			<ul class="nav navbar-nav">
+			<ul class="nav navbar-nav mr-auto">
+				<li class="nav-item pt-2 pt-sm-0">
+					<a class="nav-link text-warning alert-link" href="#" *ngIf="!salvo" (click)="openModalEntityRegister(templateEntityRegister)">Cadastrar
+						ONG</a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="#">Causa</a>
 				</li>
@@ -20,9 +24,21 @@
 				<li class="nav-item">
 					<a class="nav-link" href="#">Parceiros</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link text-warning alert-link" href="#" *ngIf="!salvo" (click)="openModal(template)">Cadastrar ONG</a>
-				</li>
+			</ul>
+			<ul class="nav navbar-nav pt-3 pt-sm-0">
+				<div class="dropdown">
+					<button class="btn btn-sm btn-outline-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+					 aria-haspopup="true" aria-expanded="false">
+						entrar
+					</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<small class="dropdown-header" style="font-size:12px">Entidades Sociais</small>
+						<a class="dropdown-item" href="#" (click)="smModal.show()">Coordenador</a>
+						<!-- <div class="dropdown-divider"></div>
+						<small class="dropdown-header" style="font-size:12px">Painel</small>
+						<a class="dropdown-item" href="#">Usuário solidário</a> -->
+					</div>
+				</div>
 			</ul>
 		</div>
 	</div>
@@ -32,7 +48,7 @@
 <app-maps>
 </app-maps>
 
-<ng-template #template>
+<ng-template #templateEntityRegister>
 
 	<div class="modal-header">
 		<h5 class="modal-title pull-left">Cadastrar Entidade Social</h5>
@@ -40,7 +56,7 @@
 
 	<form #form="ngForm" (ngSubmit)="onSubmit(form)" novalidate>
 
-		<div class="modal-body">
+		<div class="modal-body" [ngClass]="{'pb-0': !showMap}">
 			<div class="input-group form-group mb-3" *ngIf="!showMap">
 				<input type="text" id="cnpj" ngModel="{{cnpj}}" name="cnpj" #busca class="form-control form-control-lg" placeholder="CNPJ"
 				 aria-describedby="basic-addon2">
@@ -60,17 +76,17 @@
 			</div>
 
 			<div class="form-group" *ngIf="result">
-				<input type="text" ngModel="{{fantasia}}" name="fantasia" class="form-control edit-register" id="fantasia">
+				<input type="text" ngModel="{{fantasia}}" name="fantasia" class="form-control font-weight-bold text-uppercase" id="fantasia">
 				<small class="form-text">Nome fantasia</small>
 			</div>
 
 			<div class="form-group" *ngIf="result">
-				<input type="email" ngModel="{{email}}" name="email" class="form-control edit-register" id="email">
+				<input type="email" ngModel="{{email}}" name="email" class="form-control font-weight-bold text-lowercase" id="email">
 				<small class="form-text">E-mail</small>
 			</div>
 
 			<div class="form-group" *ngIf="result">
-				<input type="text" ngModel="{{areaAtuacaoPrincipal}}" name="areaAtuacaoPrincipal" class="form-control edit-register"
+				<input type="text" ngModel="{{areaAtuacaoPrincipal}}" name="areaAtuacaoPrincipal" class="form-control font-weight-bold text-capitalize"
 				 id="area-atuacao">
 				<small class="form-text">Área de atuação</small>
 			</div>
@@ -81,18 +97,58 @@
 
 		</div> <!-- end Modal body -->
 
-		<div class="modal-footer" *ngIf="showMap">
+		<div class="modal-footer" style="padding:0rem 1rem 0.5rem;border-top:none;">
 
-			<!-- <button type="button" class="btn btn-primary" *ngIf="!showMap" (click)="findCnpj(cnpj.value)">Buscar</button> -->
-			<button type="button" class="btn btn-light" *ngIf="showMap" (click)="modalRef.hide()">Cancelar</button>
-			<button type="submit" class="btn btn-success" *ngIf="showMap">Confirmar</button>
+			<div class="form-group mb-0">
+				<button type="reset" class="btn btn-link pull-right" (click)="modalRef.hide()">Cancelar</button>
+
+
+				<button type="submit" class="btn btn-success" *ngIf="showMap" disabled>Confirmar</button>
+				<small id="emailHelp" class="form-text text-muted text-right mt-2" style="font-size:10px" *ngIf="showMap">Passo
+					1/3.</small>
+			</div>
+
+			<!-- btn para testar envio de e-mail no Cloud Fuctions -->
+			<!-- <button class="btn btn-secondary" (click)="enviaEmail()">Mandar email</button> -->
 		</div>
 
 	</form>
-	<div class="modal-footer" style="padding:0rem 1rem 0.5rem;border-top:none;">
-		<button type="button" class="btn btn-link pull-right" (click)="modalRef.hide()">Cancelar</button>
 
-		<!-- btn para testar envio de e-mail no Cloud Fuctions -->
-		<button class="btn btn-secondary" (click)="enviaEmail()">Mandar email</button>
-	</div>
 </ng-template>
+
+<div bsModal #smModal="bs-modal" class="modal fade" [config]="{backdrop:'static',keyboard:false}" tabindex="-1" role="dialog"
+ aria-labelledby="dialog-login-modal">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 id="dialog-login-modal" class="modal-title pull-left">Painel adminstrativo</h5>
+				<button type="button" class="close pull-right" aria-label="Close" (click)="smModal.hide()">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form #form="ngForm" (ngSubmit)="login(form)" novalidate>
+					<div class="form-group">
+						<input type="email" class="form-control" placeholder="E-mail">
+					</div>
+					<div class="form-group">
+						<input type="password" class="form-control" placeholder="Senha">
+					</div>
+					<button type="submit" class="btn btn-sm btn-block btn-secondary" disabled>Login</button>
+					<small class="form-text text-center mt-1"><a href="#" class="text-muted">esqueci minha senha</a></small>
+				</form>
+				<div class="container pt-3">
+					<small class="text-dark">Ou com as redes sociais:</small>
+					<div class="row d-flex bg-light rounded p-2 mt-1">
+						<i style="cursor:pointer;color:#3A5793" class="my-0 mx-auto fab fa-2x fa-facebook-square"></i>
+						<i style="cursor:pointer;color:#0077b5" class="my-0 mx-auto fab fa-2x fa-linkedin"></i>
+						<i style="cursor:pointer;color:#c13584" class="my-0 mx-auto fab fa-2x fa-instagram"></i>
+						<i style="cursor:pointer;color:#41B7E8" class="my-0 mx-auto fab fa-2x fa-twitter-square"></i>
+					</div>
+					<small class="form-text text-center mt-3"><a href="#" class="text-dark" (click)="smModal.hide();openModalEntityRegister(templateEntityRegister)">ou
+							crie sua conta</a></small>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

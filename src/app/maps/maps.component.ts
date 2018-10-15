@@ -27,6 +27,7 @@ export class MapsComponent implements OnInit {
   @Input() cnpj;
   @Input() razaoSocial;
   @Input() endereco;
+  @Input() cep;
   @Input() telefone;
   @Input() email;
   @Input() presidente;
@@ -68,10 +69,11 @@ export class MapsComponent implements OnInit {
     this.modalRef.content.cnpj = this.dataResponse[indexEntity].receita.cnpj;
     this.modalRef.content.razaoSocial = this.dataResponse[indexEntity].receita.nome;
     if (!this.dataResponse[indexEntity].receita.complemento) {
-      this.modalRef.content.endereco = this.dataResponse[indexEntity].receita.logradouro + ', ' + this.dataResponse[indexEntity].receita.numero + ' - ' + this.dataResponse[indexEntity].receita.bairro + ', ' + this.dataResponse[indexEntity].receita.municipio + '-' + this.dataResponse[indexEntity].receita.uf;
+      this.modalRef.content.endereco = this.dataResponse[indexEntity].receita.logradouro + ', ' + this.dataResponse[indexEntity].receita.numero + ' - ' + this.dataResponse[indexEntity].receita.bairro + '. ' + this.dataResponse[indexEntity].receita.municipio + ' - ' + this.dataResponse[indexEntity].receita.uf + ', ';
     } else {
-      this.modalRef.content.endereco = this.dataResponse[indexEntity].receita.logradouro + ', ' + this.dataResponse[indexEntity].receita.numero + ' - ' + this.dataResponse[indexEntity].receita.complemento + ' - ' + this.dataResponse[indexEntity].receita.bairro + ', ' + this.dataResponse[indexEntity].receita.municipio + '-' + this.dataResponse[indexEntity].receita.uf;
+      this.modalRef.content.endereco = this.dataResponse[indexEntity].receita.logradouro + ', ' + this.dataResponse[indexEntity].receita.numero + ' - ' + this.dataResponse[indexEntity].receita.complemento + ' - ' + this.dataResponse[indexEntity].receita.bairro + '. ' + this.dataResponse[indexEntity].receita.municipio + ' - ' + this.dataResponse[indexEntity].receita.uf + ', ';
     }
+    this.modalRef.content.cep = this.dataResponse[indexEntity].receita.cep;
     this.modalRef.content.telefone = this.dataResponse[indexEntity].receita.telefone;
     this.modalRef.content.email = this.dataResponse[indexEntity].receita.email;
     if (this.dataResponse[indexEntity].receita.qsa) {
