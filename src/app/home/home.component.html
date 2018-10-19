@@ -11,7 +11,7 @@
 
 		<div class="collapse navbar-collapse" [ngClass]="{ 'show': navbarOpen }">
 			<ul class="nav navbar-nav mr-auto">
-				<li class="nav-item pt-2 pt-sm-0">
+				<li class="nav-item pt-2 pt-lg-0">
 					<a class="nav-link text-warning alert-link" href="#" *ngIf="!salvo" (click)="openModalEntityRegister(templateEntityRegister)">Cadastrar
 						ONG</a>
 				</li>
@@ -25,13 +25,13 @@
 					<a class="nav-link" href="#">Parceiros</a>
 				</li>
 			</ul>
-			<ul class="nav navbar-nav pt-3 pt-sm-0">
+			<ul class="nav navbar-nav pt-3 pt-lg-0">
 				<div class="dropdown">
 					<button class="btn btn-sm btn-outline-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
 					 aria-haspopup="true" aria-expanded="false">
 						entrar
 					</button>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 						<small class="dropdown-header" style="font-size:12px">Entidades Sociais</small>
 						<a class="dropdown-item" href="#" (click)="smModal.show()">Coordenador</a>
 						<!-- <div class="dropdown-divider"></div>
@@ -50,62 +50,120 @@
 
 <ng-template #templateEntityRegister>
 
-	<div class="modal-header">
+	<div class="modal-header border-bottom-0 bg-light">
 		<h5 class="modal-title pull-left">Cadastrar Entidade Social</h5>
+		<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+			<span aria-hidden="true">&times;</span>
+		</button>
 	</div>
 
 	<form #form="ngForm" (ngSubmit)="onSubmit(form)" novalidate>
 
-		<div class="modal-body" [ngClass]="{'pb-0': !showMap}">
-			<div class="input-group form-group mb-3" *ngIf="!showMap">
-				<input type="text" id="cnpj" ngModel="{{cnpj}}" name="cnpj" #busca class="form-control form-control-lg" placeholder="CNPJ"
-				 aria-describedby="basic-addon2">
+		<div class="modal-body bg-light" [ngClass]="{'pb-1': registrationSteps == 1}">
+
+			<div class="input-group form-group" *ngIf="registrationSteps == 1">
+				<input type="text" id="cnpj" ngModel="{{cnpj}}" name="cnpj" #buscaCnpj class="form-control form-control-lg"
+				 placeholder="CNPJ" aria-describedby="basic-addon2">
 				<div class="input-group-append">
-					<button class="btn btn-primary" type="button" (click)="findCnpj(busca.value);"><i class="fas fa-search"></i></button>
+					<button class="btn btn-secondary" type="button" (click)="findCnpj(buscaCnpj.value);"><i class="fas fa-search"></i></button>
 				</div>
 			</div>
 
-			<div class="form-group" *ngIf="result">
+			<div class="form-group" *ngIf="registrationSteps == 2">
 				<input type="text" ngModel="{{razaoSocial}}" name="razaoSocial" class="form-control form-control-sm" id="razao-social"
 				 disabled>
 			</div>
 
-			<div class="form-group" *ngIf="result">
+			<div class="form-group" *ngIf="registrationSteps == 2">
 				<input type="text" ngModel="{{atividadePrincipal}}" name="atividadePrincipal" class="form-control form-control-sm"
-				 id="razao-social" disabled>
+				 id="atividade-principal" disabled>
 			</div>
 
-			<div class="form-group" *ngIf="result">
+			<div class="form-group" *ngIf="registrationSteps == 2">
 				<input type="text" ngModel="{{fantasia}}" name="fantasia" class="form-control font-weight-bold text-uppercase" id="fantasia">
 				<small class="form-text">Nome fantasia</small>
 			</div>
 
-			<div class="form-group" *ngIf="result">
+			<div class="form-group" *ngIf="registrationSteps == 2">
 				<input type="email" ngModel="{{email}}" name="email" class="form-control font-weight-bold text-lowercase" id="email">
 				<small class="form-text">E-mail</small>
 			</div>
 
-			<div class="form-group" *ngIf="result">
+			<div class="form-group" *ngIf="registrationSteps == 2">
 				<input type="text" ngModel="{{areaAtuacaoPrincipal}}" name="areaAtuacaoPrincipal" class="form-control font-weight-bold text-capitalize"
-				 id="area-atuacao">
+				 id="area-de-atuacao">
 				<small class="form-text">Área de atuação</small>
 			</div>
 
-			<div *ngIf="showMap" style="height: 120px;">
+			<div *ngIf="registrationSteps == 2" style="height: 120px;">
 				<app-mapa-cadastro [lat]="lat" [lng]="lng"></app-mapa-cadastro>
+			</div>
+
+			<div class="input-group mb-3" *ngIf="registrationSteps == 3">
+				<div class="input-group-prepend">
+					<span class="input-group-text" id="basic-addon3">ongbook.org/</span>
+				</div>
+				<input type="text" class="form-control" id="sigla" aria-describedby="basic-addon3" placeholder="Sigla da ONG">
+			</div>
+
+			<div class="jumbotron pt-3 pb-2 mb-0" *ngIf="registrationSteps == 3">
+
+				<h6 *ngIf="registrationSteps == 3">Coordenador responsável</h6>
+
+				<div class="input-group form-group" *ngIf="registrationSteps == 3">
+					<input type="text" id="cpf" ngModel="{{cpf}}" name="cpf" #buscaCpf class="form-control" placeholder="CPF"
+					 aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<button class="btn btn-secondary" type="button" (click)="findCpf(buscaCpf);"><i class="fas fa-search"></i></button>
+					</div>
+				</div>
+
+				<div class="form-group" *ngIf="registrationSteps == 3">
+					<input type="text" class="form-control" placeholder="Nome" disabled>
+				</div>
+
+				<div class="form-group" *ngIf="registrationSteps == 3">
+					<input type="email" class="form-control" placeholder="E-mail">
+				</div>
+
+				<div class="form-group" *ngIf="registrationSteps == 3">
+					<input type="password" class="form-control" placeholder="Senha">
+				</div>
+
+				<div class="form-group" *ngIf="registrationSteps == 3">
+					<input type="password" class="form-control" placeholder="Confirme a senha">
+				</div>
+
+			</div>
+
+			<div class="container pt-3" *ngIf="registrationSteps == 3">
+				<small class="text-dark">Ou com as redes sociais:</small>
+				<div class="row d-flex rounded p-2 my-1 jumbotron">
+					<i style="cursor:pointer;color:#3A5793" class="my-0 mx-auto fab fa-2x fa-facebook-square"></i>
+					<i style="cursor:pointer;color:#0077b5" class="my-0 mx-auto fab fa-2x fa-linkedin"></i>
+					<i style="cursor:pointer" class="my-0 mx-auto fab fa-2x fa-github-square"></i>
+					<i style="cursor:pointer;color:#c13584" class="my-0 mx-auto fab fa-2x fa-instagram"></i>
+					<i style="cursor:pointer;color:#41B7E8" class="my-0 mx-auto fab fa-2x fa-twitter-square"></i>
+				</div>
 			</div>
 
 		</div> <!-- end Modal body -->
 
-		<div class="modal-footer" style="padding:0rem 1rem 0.5rem;border-top:none;">
+		<div class="modal-footer rounded-bottom bg-light border-top-0 py-0" [ngClass]="{'pb-2': registrationSteps == 1}">
 
-			<div class="form-group mb-0">
-				<button type="reset" class="btn btn-link pull-right" (click)="modalRef.hide()">Cancelar</button>
+			<div class="col-6" *ngIf="registrationSteps == 1">
+				<small><a class="text-secondary" (click)="modalRef.hide(); smModal.show();" href="#">já tenho conta</a></small>
+			</div>
 
-
-				<button type="submit" class="btn btn-success" *ngIf="showMap" disabled>Confirmar</button>
-				<small id="emailHelp" class="form-text text-muted text-right mt-2" style="font-size:10px" *ngIf="showMap">Passo
-					1/3.</small>
+			<div class="text-right pr-0" [ngClass]="{'col-6': registrationSteps == 1,'pl-0 col-12': registrationSteps != 1 }">
+				<div class="form-group mb-1">
+					<button type="button" class="btn btn-sm btn-outline-secondary mr-2" *ngIf="registrationSteps != 1 && registrationSteps != 'step4'"
+					 (click)="backStep();">Voltar</button>
+					<button type="button" class="btn btn-sm btn-success" *ngIf="registrationSteps == 2" (click)="nextStep();">Avançar</button>
+					<button type="submit" class="btn btn-sm btn-success" *ngIf="registrationSteps == 3">Cadastrar</button>
+					<small id="emailHelp" class="form-text text-muted text-right mt-2" style="font-size:10px" *ngIf="registrationSteps != 1 && registrationSteps != 'step4'">Passo
+						{{ registrationSteps }}/4.</small>
+				</div>
 			</div>
 
 			<!-- btn para testar envio de e-mail no Cloud Fuctions -->
@@ -119,8 +177,8 @@
 <div bsModal #smModal="bs-modal" class="modal fade" [config]="{backdrop:'static',keyboard:false}" tabindex="-1" role="dialog"
  aria-labelledby="dialog-login-modal">
 	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="modal-header">
+		<div class="modal-content bg-light">
+			<div class="modal-header border-bottom-0">
 				<h5 id="dialog-login-modal" class="modal-title pull-left">Painel adminstrativo</h5>
 				<button type="button" class="close pull-right" aria-label="Close" (click)="smModal.hide()">
 					<span aria-hidden="true">&times;</span>
@@ -139,9 +197,10 @@
 				</form>
 				<div class="container pt-3">
 					<small class="text-dark">Ou com as redes sociais:</small>
-					<div class="row d-flex bg-light rounded p-2 mt-1">
+					<div class="row d-flex rounded p-2 mt-1 jumbotron">
 						<i style="cursor:pointer;color:#3A5793" class="my-0 mx-auto fab fa-2x fa-facebook-square"></i>
 						<i style="cursor:pointer;color:#0077b5" class="my-0 mx-auto fab fa-2x fa-linkedin"></i>
+						<i style="cursor:pointer" class="my-0 mx-auto fab fa-2x fa-github-square"></i>
 						<i style="cursor:pointer;color:#c13584" class="my-0 mx-auto fab fa-2x fa-instagram"></i>
 						<i style="cursor:pointer;color:#41B7E8" class="my-0 mx-auto fab fa-2x fa-twitter-square"></i>
 					</div>
