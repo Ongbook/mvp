@@ -6,7 +6,9 @@ import { Component, OnInit, Input } from '@angular/core';
 	styleUrls: ['./mapa-cadastro.component.scss']
 })
 export class MapaCadastroComponent implements OnInit {
-	// google maps zoom level
+  /**
+   * Google Maps Zoom Level
+  */
 	zoom: number = 16;
 
 	@Input() lat: number;
@@ -17,7 +19,7 @@ export class MapaCadastroComponent implements OnInit {
 	constructor() { }
 
 	ngOnInit() {
-		
+
 		let lt = this.lat;
 		let lg = this.lng;
 
