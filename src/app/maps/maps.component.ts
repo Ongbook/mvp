@@ -11,7 +11,9 @@ import { ModalEntityProfileComponent } from './modal-entity-profile/modal-entity
   styleUrls: ['./maps.component.scss']
 })
 export class MapsComponent implements OnInit {
-  // google maps zoom level
+  /**
+   * Google Maps Zoom Level
+  */
   zoom: number = 4;
   lat: number = -13.4959635;
   lng: number = -53.33138455;
@@ -40,6 +42,9 @@ export class MapsComponent implements OnInit {
     this.entidades.subscribe(data => {
 
       // passando o objeto para array
+      /**
+       * Passando o objeto para Array
+      */
       for (const key in data) {
         if (data.hasOwnProperty(key)) {
           this.dataResponse.push(data[key]);
