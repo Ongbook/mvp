@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 
@@ -11,6 +11,7 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 export class ModalEntityProfileComponent implements OnInit {
 
   public modalClose: BsModalRef;
+  // hideModal: BsModalRef;
 
   constructor(private modalService: BsModalService) { }
 
@@ -18,7 +19,9 @@ export class ModalEntityProfileComponent implements OnInit {
     // fechar modal
   }
 
+  hideModal() {
+    this.modalService._hideModal(1);
+  }
   ngOnInit() {
   }
-
 }
