@@ -11,6 +11,9 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 export class ModalEntityProfileComponent implements OnInit {
 
   public modalClose: BsModalRef;
+  /**
+  No momento está sendo inutilizado.
+  */
   // hideModal: BsModalRef;
 
   constructor(private modalService: BsModalService) { }
