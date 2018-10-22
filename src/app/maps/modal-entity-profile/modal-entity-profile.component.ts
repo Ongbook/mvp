@@ -12,7 +12,7 @@ export class ModalEntityProfileComponent implements OnInit {
 
   public modalClose: BsModalRef;
   /**
-  No momento está sendo inutilizado.
+   * No momento está sendo inutilizado.
   */
   // hideModal: BsModalRef;
 
