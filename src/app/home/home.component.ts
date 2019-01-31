@@ -31,6 +31,7 @@ export class HomeComponent implements OnInit {
 	salvo: Boolean = false;
 
 	public modalRef: BsModalRef;
+	public customPatterns = {'0': { pattern: new RegExp('\[0-9\]')}};
 
 	constructor(private modalService: BsModalService, private BuscaCnpjService: BuscaCnpjService,
 		private BuscaLatLngService: BuscaLatLngService, private db: AngularFireDatabase, private EnviaEmailService: EnviaEmailService) { }
@@ -43,10 +44,10 @@ export class HomeComponent implements OnInit {
 	}
 
 	findCnpj(value) {
-
+		
 		this.BuscaCnpjService.getCnpj(value).subscribe((res) => {
 			localStorage.setItem('dadosReceita', JSON.stringify(res));
-
+		
 			//concat for google maps
 			const endereco = res['logradouro'] + ', ' + res['numero'] + ' - ' + res['bairro'] + ', ' + res['municipio'] + '-' + res['uf'];
 

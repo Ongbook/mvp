@@ -1,14 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root'
 })
+
 export class BuscaCnpjService {
 
 	private url = 'https://www.receitaws.com.br/v1/cnpj';
 	private uri: string;
 	private httpOptions;
+	
 
 	constructor(private http: HttpClient) { }
 

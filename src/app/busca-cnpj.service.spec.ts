@@ -9,7 +9,18 @@ describe('BuscaCnpjService', () => {
     });
   });
 
-  it('should be created', inject([BuscaCnpjService], (service: BuscaCnpjService) => {
+  it(newFunction(), inject([BuscaCnpjService], (service: BuscaCnpjService) => {
     expect(service).toBeTruthy();
   }));
+
+  it(newFunction(), inject([BuscaCnpjService], (service: BuscaCnpjService) => {
+    expect(null).toBeFalsy();
+  }));
+  
+
+  
 });
+function newFunction(): string {
+  return 'should be created';
+}
+

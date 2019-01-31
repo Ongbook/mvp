@@ -62,8 +62,9 @@
 		<div class="modal-body bg-light" [ngClass]="{'pb-1': registrationSteps == 1}">
 
 			<div class="input-group form-group" *ngIf="registrationSteps == 1">
-				<input type="text" id="cnpj" ngModel="{{cnpj}}" name="cnpj" #buscaCnpj class="form-control form-control-lg"
-				 placeholder="CNPJ" aria-describedby="basic-addon2">
+				<input type="text" id="cnpj" ngModel="{{cnpj}}" maxlength="14" name="cnpj" #buscaCnpj class="form-control form-control-lg"
+				 placeholder="Informe apenas numeros" aria-describedby="basic-addon2">
+				 
 				<div class="input-group-append">
 					<button class="btn btn-secondary" type="button" (click)="findCnpj(buscaCnpj.value);"><i class="fas fa-search"></i></button>
 				</div>
