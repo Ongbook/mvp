@@ -4,12 +4,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { environment } from '../environments/environment';
 
 import { BuscaCnpjService } from './busca-cnpj.service';
 import { BuscaLatLngService } from './busca-lat-lng.service';
 import { EnviaEmailService } from './envia-email.service';
+import { AuthService } from './auth.service';
+import { EntidadeService } from './entidade.service';
 
 import { AgmCoreModule } from '@agm/core';
 import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
@@ -48,10 +51,11 @@ import { ModalEntityProfileComponent } from './maps/modal-entity-profile/modal-e
     }),
     AgmJsMarkerClustererModule,
     AngularFireDatabaseModule,
+    AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase)
   
   ],
-  providers: [BuscaCnpjService, BuscaLatLngService, EnviaEmailService],
+  providers: [BuscaCnpjService, BuscaLatLngService, EnviaEmailService, AuthService, EntidadeService],
   bootstrap: [AppComponent],
   entryComponents: [
     ModalEntityProfileComponent
