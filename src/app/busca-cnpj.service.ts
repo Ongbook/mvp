@@ -6,7 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class BuscaCnpjService {
 
-	private url = 'https://www.receitaws.com.br/v1/cnpj';
+	private url = '/v1/cnpj';
 	private uri: string;
 	private httpOptions;
 
