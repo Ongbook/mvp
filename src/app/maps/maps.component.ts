@@ -41,21 +41,22 @@ export class MapsComponent implements OnInit {
 
     this.entidades.subscribe(data => {
 
+      this.dataResponse = [];
       // passando o objeto para array
-      /**
-       * Passando o objeto para Array
-      */
       for (const key in data) {
         if (data.hasOwnProperty(key)) {
           this.dataResponse.push(data[key]);
         }
       }
+
       localStorage.setItem('listagem_completa', JSON.stringify(data));
+
+      this.markers = [];
 
       for (let i = 0; i < this.dataResponse.length; i++) {
         this.markers.push({
-          lat: data[i].geo.lat,
-          lng: data[i].geo.lng,
+          lat: data[i].lat,
+          lng: data[i].lng,
           dados: data[i].receita,
           draggable: false
         });
@@ -66,7 +67,7 @@ export class MapsComponent implements OnInit {
   ngOnInit() { }
 
   public openModalEntityProfile(indexEntity) {
-    console.log(indexEntity);
+    //console.log(indexEntity);
     this.modalRef = this.modalService.show(ModalEntityProfileComponent);
 
     this.modalRef.content.fantasia = this.dataResponse[indexEntity].receita.fantasia;
@@ -85,11 +86,11 @@ export class MapsComponent implements OnInit {
       this.modalRef.content.presidente = this.dataResponse[indexEntity].receita.qsa[0].nome;
     }
     this.modalRef.content.dtFundacao = this.dataResponse[indexEntity].receita.abertura;
-    console.log(this.dataResponse[indexEntity]);
+    //console.log(this.dataResponse[indexEntity]);
   }
 
   clickedMarker(label: string, index: number) {
-    console.log(`clicked the marker: ${label || index}`);
+    //console.log(`clicked the marker: ${label || index}`);
   }
 
 }
