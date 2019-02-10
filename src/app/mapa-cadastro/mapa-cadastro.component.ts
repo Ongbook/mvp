@@ -33,7 +33,7 @@ export class MapaCadastroComponent implements OnInit {
 	}
 
 	markerDragEnd(m: marker, $event: MouseEvent) {
-		console.log('dragEnd', m, $event);
+		//console.log('dragEnd', m, $event);
 	}
 
 }
