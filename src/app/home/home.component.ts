@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormControl } from '@angular/forms';
 
 import { AngularFireDatabase } from '@angular/fire/database';
 
@@ -17,13 +17,8 @@ import { EnviaEmailService } from '../envia-email.service';
 
 export class HomeComponent implements OnInit {
 
-	cnpj: any;
-	atividadePrincipal: String;
-	razaoSocial: String;
-	fantasia: String;
-	email: String;
-	lat: Number = -19.82519036;
-	lng: Number = -40.65804826;
+	lat: Number;
+	lng: Number;
 
 	navbarOpen: Boolean = false;
 	registrationSteps: Number = 1;
@@ -32,38 +27,61 @@ export class HomeComponent implements OnInit {
 
 	public modalRef: BsModalRef;
 
-	constructor(private modalService: BsModalService, private BuscaCnpjService: BuscaCnpjService,
-		private BuscaLatLngService: BuscaLatLngService, private db: AngularFireDatabase, private EnviaEmailService: EnviaEmailService) { }
+	public formCadastro: FormGroup;
 
-	ngOnInit() {
-	}
+	constructor(private modalService: BsModalService, private BuscaCnpjService: BuscaCnpjService,
+		private BuscaLatLngService: BuscaLatLngService, private db: AngularFireDatabase, private EnviaEmailService: EnviaEmailService) {
+
+			this.formCadastro = new FormGroup({
+				cnpj: new FormControl(''),
+				razaoSocial: new FormControl(''),
+				atividadePrincipal: new FormControl(''),
+				areaAtuacao: new FormControl(''),
+				sigla: new FormControl(''),
+				nomeFantasia: new FormControl(''),
+				email: new FormControl(''),
+				lat: new FormControl(''),
+				lng: new FormControl(''),
+				receita: new FormControl(''),
+				responsavel: new FormGroup({
+					nome: new FormControl(''),
+					cpf: new FormControl(''),
+					email: new FormControl(''),
+					senha: new FormControl(''),
+					senhaOk: new FormControl('')
+				})
+			  });
+		 }
+
+	ngOnInit() {}
 
 	public openModalEntityRegister(templateEntityRegister: TemplateRef<any>) {
 		this.modalRef = this.modalService.show(templateEntityRegister, { backdrop: 'static', keyboard: false });
 	}
 
-	findCnpj(value) {
+	findCnpj(value: any) {
 
 		this.BuscaCnpjService.getCnpj(value).subscribe((res) => {
-			localStorage.setItem('dadosReceita', JSON.stringify(res));
 
 			//concat for google maps
 			const endereco = res['logradouro'] + ', ' + res['numero'] + ' - ' + res['bairro'] + ', ' + res['municipio'] + '-' + res['uf'];
 
-			this.atividadePrincipal = res['atividade_principal'][0].text;
-			this.razaoSocial = res['nome'];
-			this.fantasia = res['fantasia'];
-			this.email = res['email'];
-			this.cnpj = res['cnpj'];
+			this.formCadastro.controls['cnpj'].setValue(res['cnpj']);
+			this.formCadastro.controls['razaoSocial'].setValue(res['nome']);
+			this.formCadastro.controls['atividadePrincipal'].setValue(res['atividade_principal'][0].text);
+			this.formCadastro.controls['nomeFantasia'].setValue(res['fantasia']);
+			this.formCadastro.controls['email'].setValue(res['email']);
+			this.formCadastro.controls['receita'].setValue(res);
 
 			this.BuscaLatLngService.getlatlng(endereco).subscribe(data => {
-				const resLatLng = data['results'];
-				this.lat = resLatLng[0].geometry.location.lat;
-				this.lng = resLatLng[0].geometry.location.lng;
-
-				localStorage.setItem('geocode', JSON.stringify(resLatLng[0].geometry.location));
+				
+				this.formCadastro.controls['lat'].setValue(data['results'][0].geometry.location.lat);
+				this.formCadastro.controls['lng'].setValue(data['results'][0].geometry.location.lng);
 
 				this.registrationSteps = 2;
+
+				this.lat = data['results'][0].geometry.location.lat;
+				this.lng = data['results'][0].geometry.location.lng;
 
 			}, errr => {
 				console.log(errr);
@@ -71,14 +89,15 @@ export class HomeComponent implements OnInit {
 
 		}, err => {
 			console.log(err);
-		});
+		});  
+
 	}
 
 	backStep() {
 		if (this.registrationSteps === 3) {
 			this.registrationSteps = 2;
 		} else if (this.registrationSteps === 2) {
-			this.cnpj = null;
+			this.formCadastro.value.cnpj = null;
 			this.registrationSteps = 1;
 		}
 	}
@@ -91,20 +110,12 @@ export class HomeComponent implements OnInit {
 		this.navbarOpen = !this.navbarOpen;
 	}
 
-	onSubmit(form: NgForm) {
-
-		const geo = JSON.parse(localStorage.getItem('geocode'));
-		const receita = JSON.parse(localStorage.getItem('dadosReceita'));
-		const f = form.value;
+	onSubmit() {
 
 		// gravando no database firebase
-		this.db.list('/entidades').push({
-			geo: geo,
-			receita: receita,
-			form: f
-		});
-
-		console.log('## onsubmit ##');
+		this.db.list('/entidades').push(
+			this.formCadastro.value
+		);
 
 		this.modalRef.hide();
 
@@ -114,7 +125,6 @@ export class HomeComponent implements OnInit {
 
 	// test envio e-mail Cloud Functions firebase
 	enviaEmail() {
-		// está aqui como teste por enquanto
 		this.EnviaEmailService.sendEmail();
 	}
 
