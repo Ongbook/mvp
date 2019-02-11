@@ -26,6 +26,7 @@ export class HomeComponent implements OnInit {
 	salvo: Boolean = false;
 
 	public modalRef: BsModalRef;
+	public customPatterns = {'0': { pattern: new RegExp('\[0-9\]')}};
 
 	public formCadastro: FormGroup;
 
