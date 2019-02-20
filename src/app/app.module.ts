@@ -23,8 +23,7 @@ import { HomeComponent } from './home/home.component';
 import { MapsComponent } from './maps/maps.component';
 import { MapaCadastroComponent } from './mapa-cadastro/mapa-cadastro.component';
 import { ModalEntityProfileComponent } from './maps/modal-entity-profile/modal-entity-profile.component';
-import {NgxMaskModule} from 'ngx-mask';
-import { ComponentCnpjComponent } from './component-cnpj/component-cnpj.component'
+
 
 @NgModule({
   declarations: [
@@ -32,8 +31,8 @@ import { ComponentCnpjComponent } from './component-cnpj/component-cnpj.componen
     HomeComponent,
     MapsComponent,
     MapaCadastroComponent,
-    ModalEntityProfileComponent,
-    ComponentCnpjComponent
+    ModalEntityProfileComponent
+
   ],
   imports: [
     BrowserModule,
@@ -49,8 +48,8 @@ import { ComponentCnpjComponent } from './component-cnpj/component-cnpj.componen
     }),
     AgmJsMarkerClustererModule,
     AngularFireDatabaseModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    NgxMaskModule.forRoot()
+    AngularFireModule.initializeApp(environment.firebase)
+  
   ],
   providers: [BuscaCnpjService, BuscaLatLngService, EnviaEmailService],
   bootstrap: [AppComponent],
