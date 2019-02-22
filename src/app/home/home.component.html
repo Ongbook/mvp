@@ -15,6 +15,7 @@
 					<a class="nav-link text-warning alert-link" href="#" *ngIf="!salvo" (click)="openModalEntityRegister(templateEntityRegister)">Cadastrar
 						ONG</a>
 				</li>
+				<!-- para próxima entrega.
 				<li class="nav-item">
 					<a class="nav-link" href="#">Causa</a>
 				</li>
@@ -24,7 +25,9 @@
 				<li class="nav-item">
 					<a class="nav-link" href="#">Parceiros</a>
 				</li>
+				-->
 			</ul>
+			<!-- para próxima entrega.
 			<ul class="nav navbar-nav pt-3 pt-lg-0">
 				<div class="dropdown">
 					<button class="btn btn-sm btn-outline-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
@@ -36,10 +39,11 @@
 						<a class="dropdown-item" href="#" (click)="smModal.show()">Coordenador</a>
 						<!-- <div class="dropdown-divider"></div>
 						<small class="dropdown-header" style="font-size:12px">Painel</small>
-						<a class="dropdown-item" href="#">Usuário solidário</a> -->
+						<a class="dropdown-item" href="#">Usuário solidário</a>
 					</div>
 				</div>
 			</ul>
+			-->
 		</div>
 	</div>
 </nav>
@@ -64,7 +68,7 @@
 			<div class="input-group form-group" *ngIf="registrationSteps == 1">
 
 				<input type="text" id="cnpj" formControlName="cnpj" maxlength="14" name="cnpj" #buscaCnpj class="form-control form-control-lg"
-				 placeholder="Informe apenas numeros" aria-describedby="basic-addon2">
+				 placeholder="CNPJ - apenas números" aria-describedby="basic-addon2">
 				 
 				<div class="input-group-append">
 					<button class="btn btn-secondary" type="button" (click)="findCnpj(buscaCnpj.value);"><i class="fas fa-search"></i></button>
@@ -153,9 +157,11 @@
 
 		<div class="modal-footer rounded-bottom bg-light border-top-0 py-0" [ngClass]="{'pb-2': registrationSteps == 1}">
 
+			<!-- para próxima entrega.
 			<div class="col-6" *ngIf="registrationSteps == 1">
 				<small><a class="text-secondary" (click)="modalRef.hide(); smModal.show();" href="#">já tenho conta</a></small>
 			</div>
+			-->
 
 			<div class="text-right pr-0" [ngClass]="{'col-6': registrationSteps == 1,'pl-0 col-12': registrationSteps != 1 }">
 				<div class="form-group mb-1">
