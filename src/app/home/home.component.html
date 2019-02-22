@@ -67,6 +67,7 @@
 		<div class="modal-body bg-light" [ngClass]="{'pb-1': registrationSteps == 1}">
 
 			<div class="input-group form-group" *ngIf="registrationSteps == 1">
+
 				<input type="text" id="cnpj" formControlName="cnpj" maxlength="14" name="cnpj" #buscaCnpj class="form-control form-control-lg"
 				 placeholder="CNPJ - apenas números" aria-describedby="basic-addon2">
 
