@@ -1,13 +1,12 @@
 import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { NgForm, FormGroup, FormControl } from '@angular/forms';
-
-import { AngularFireDatabase } from '@angular/fire/database';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { BuscaCnpjService } from '../busca-cnpj.service';
 import { BuscaLatLngService } from '../busca-lat-lng.service';
 import { EnviaEmailService } from '../envia-email.service';
+import { AuthService } from '../auth.service';
 
 @Component({
 	selector: 'app-home',
@@ -30,36 +29,38 @@ export class HomeComponent implements OnInit {
 	public formCadastro: FormGroup;
 
 	constructor(private modalService: BsModalService, private BuscaCnpjService: BuscaCnpjService,
-		private BuscaLatLngService: BuscaLatLngService, private db: AngularFireDatabase, private EnviaEmailService: EnviaEmailService) {
+		private BuscaLatLngService: BuscaLatLngService, private EnviaEmailService: EnviaEmailService,
+		private authService: AuthService) {
 
-			this.formCadastro = new FormGroup({
-				cnpj: new FormControl(''),
-				razaoSocial: new FormControl(''),
-				atividadePrincipal: new FormControl(''),
-				areaAtuacao: new FormControl(''),
-				sigla: new FormControl(''),
-				nomeFantasia: new FormControl(''),
-				email: new FormControl(''),
-				lat: new FormControl(''),
-				lng: new FormControl(''),
-				receita: new FormControl(''),
-				responsavel: new FormGroup({
-					nome: new FormControl(''),
-					cpf: new FormControl(''),
-					email: new FormControl(''),
-					senha: new FormControl(''),
-					senhaOk: new FormControl('')
-				})
-			  });
-		 }
+		this.formCadastro = new FormGroup({
+			cnpj: new FormControl(''),
+			razaoSocial: new FormControl(''),
+			atividadePrincipal: new FormControl(''),
+			areaAtuacao: new FormControl(''),
+			sigla: new FormControl(''),
+			nomeFantasia: new FormControl(''),
+			email: new FormControl('', [ Validators.required, Validators.email ]),
+			lat: new FormControl(''),
+			lng: new FormControl(''),
+			receita: new FormControl(''),
+			responsavel: new FormGroup({
+				uid: new FormControl(''),
+				nome: new FormControl(''),
+				cpf: new FormControl(''),
+				emailResponsavel: new FormControl('', [ Validators.required, Validators.email ]),
+				senha: new FormControl('', [ Validators.required ]),
+				senhaOk: new FormControl('', [ Validators.required ])
+			})
+		});
+	}
 
-	ngOnInit() {}
+	ngOnInit() { this.registrationSteps == 2 }
 
 	public openModalEntityRegister(templateEntityRegister: TemplateRef<any>) {
 		this.modalRef = this.modalService.show(templateEntityRegister, { backdrop: 'static', keyboard: false });
 	}
 
-	findCnpj(value: any) {
+	buscaCnpj(value: any) {
 
 		this.BuscaCnpjService.getCnpj(value).subscribe((res) => {
 
@@ -74,7 +75,7 @@ export class HomeComponent implements OnInit {
 			this.formCadastro.controls['receita'].setValue(res);
 
 			this.BuscaLatLngService.getlatlng(endereco).subscribe(data => {
-				
+
 				this.formCadastro.controls['lat'].setValue(data['results'][0].geometry.location.lat);
 				this.formCadastro.controls['lng'].setValue(data['results'][0].geometry.location.lng);
 
@@ -89,7 +90,7 @@ export class HomeComponent implements OnInit {
 
 		}, err => {
 			console.log(err);
-		});  
+		});
 
 	}
 
@@ -112,10 +113,23 @@ export class HomeComponent implements OnInit {
 
 	onSubmit() {
 
-		// gravando no database firebase
-		this.db.list('/entidades').push(
-			this.formCadastro.value
-		);
+		this.authService.criaUsuarioEntidade(this.formCadastro)
+			.then((res) => {
+
+				if (res == "erro") {
+					//TODO - disparar alerta bootstrap
+					console.log("Erro ao cadastrar Entidade!")
+				}
+
+				if (res == "sucesso") {
+					//TODO - disparar alerta bootstrap	
+					console.log("Entidade cadastrada com sucesso!")
+				}
+
+			}).catch((err) => {
+				//TODO - disparar alerta bootstrap
+				console.log(err)
+			});
 
 		this.modalRef.hide();
 

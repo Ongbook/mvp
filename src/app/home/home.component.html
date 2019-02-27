@@ -62,10 +62,10 @@
 		<div class="modal-body bg-light" [ngClass]="{'pb-1': registrationSteps == 1}">
 
 			<div class="input-group form-group" *ngIf="registrationSteps == 1">
-				<input type="text" id="cnpj" formControlName="cnpj" name="cnpj" #buscaCnpj class="form-control form-control-lg"
+				<input type="text" id="cnpj" formControlName="cnpj" name="cnpj" #cnpj class="form-control form-control-lg"
 				 placeholder="CNPJ" aria-describedby="basic-addon2">
 				<div class="input-group-append">
-					<button class="btn btn-secondary" type="button" (click)="findCnpj(buscaCnpj.value);"><i class="fas fa-search"></i></button>
+					<button class="btn btn-secondary" type="button" (click)="buscaCnpj(cnpj.value);"><i class="fas fa-search"></i></button>
 				</div>
 			</div>
 
@@ -123,7 +123,7 @@
 				</div>
 
 				<div class="form-group" *ngIf="registrationSteps == 3">
-					<input type="email" class="form-control" placeholder="E-mail" formControlName="email" name="email" id="email">
+					<input type="email" class="form-control" placeholder="E-mail" formControlName="emailResponsavel" name="emailResponsavel" id="emailResponsavel">
 				</div>
 
 				<div class="form-group" *ngIf="registrationSteps == 3">
@@ -160,7 +160,7 @@
 					<button type="button" class="btn btn-sm btn-outline-secondary mr-2" *ngIf="registrationSteps != 1 && registrationSteps != 'step4'"
 					 (click)="backStep();">Voltar</button>
 					<button type="button" class="btn btn-sm btn-success" *ngIf="registrationSteps == 2" (click)="nextStep();">Avançar</button>
-					<button type="submit" class="btn btn-sm btn-success" *ngIf="registrationSteps == 3">Cadastrar</button>
+					<button type="submit" class="btn btn-sm btn-success" *ngIf="registrationSteps == 3" [disabled]="!formCadastro.valid">Cadastrar</button>
 					<small id="emailHelp" class="form-text text-muted text-right mt-2" style="font-size:10px" *ngIf="registrationSteps != 1 && registrationSteps != 'step4'">Passo
 						{{ registrationSteps }}/4.</small>
 				</div>
