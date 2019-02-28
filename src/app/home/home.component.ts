@@ -6,6 +6,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { BuscaCnpjService } from '../busca-cnpj.service';
 import { BuscaLatLngService } from '../busca-lat-lng.service';
 import { EnviaEmailService } from '../envia-email.service';
+import { EntidadeService } from '../entidade.service';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -30,7 +31,7 @@ export class HomeComponent implements OnInit {
 
 	constructor(private modalService: BsModalService, private BuscaCnpjService: BuscaCnpjService,
 		private BuscaLatLngService: BuscaLatLngService, private EnviaEmailService: EnviaEmailService,
-		private authService: AuthService) {
+		private authService: AuthService, private entidadeService: EntidadeService) {
 
 		this.formCadastro = new FormGroup({
 			cnpj: new FormControl(''),
@@ -39,7 +40,7 @@ export class HomeComponent implements OnInit {
 			areaAtuacao: new FormControl(''),
 			sigla: new FormControl(''),
 			nomeFantasia: new FormControl(''),
-			email: new FormControl('', [ Validators.required, Validators.email ]),
+			email: new FormControl('', [Validators.required, Validators.email]),
 			lat: new FormControl(''),
 			lng: new FormControl(''),
 			receita: new FormControl(''),
@@ -47,9 +48,9 @@ export class HomeComponent implements OnInit {
 				uid: new FormControl(''),
 				nome: new FormControl(''),
 				cpf: new FormControl(''),
-				emailResponsavel: new FormControl('', [ Validators.required, Validators.email ]),
-				senha: new FormControl('', [ Validators.required ]),
-				senhaOk: new FormControl('', [ Validators.required ])
+				emailResponsavel: new FormControl('', [Validators.required, Validators.email]),
+				senha: new FormControl('', [Validators.required]),
+				senhaOk: new FormControl('', [Validators.required])
 			})
 		});
 	}
@@ -113,28 +114,49 @@ export class HomeComponent implements OnInit {
 
 	onSubmit() {
 
-		this.authService.criaUsuarioEntidade(this.formCadastro)
-			.then((res) => {
+		let email = this.formCadastro.controls['responsavel'].value['emailResponsavel'];
+		let senha = this.formCadastro.controls['responsavel'].value['senhaOk'];
 
-				if (res == "erro") {
+		this.authService.criaUsuarioEntidade(email, senha)
+			.then((uid) => {
+
+				if (uid == "erro" || undefined) {
 					//TODO - disparar alerta bootstrap
-					console.log("Erro ao cadastrar Entidade!")
-				}
+					console.log("Erro ao criar usuário responsável!")
+				} else {
 
-				if (res == "sucesso") {
-					//TODO - disparar alerta bootstrap	
-					console.log("Entidade cadastrada com sucesso!")
+					this.formCadastro.controls['responsavel'].get('uid').setValue(uid);
+					this.criaEntidade();
 				}
 
 			}).catch((err) => {
 				//TODO - disparar alerta bootstrap
 				console.log(err)
 			});
+	}
 
-		this.modalRef.hide();
+	criaEntidade() {
 
-		this.salvo = true;
-		this.registrationSteps = 4;
+		this.entidadeService.criaEntidade(this.formCadastro)
+			.then((res) => {
+
+				if (res == 'sucesso') {
+
+					//TODO - disparar alerta bootstrap
+					console.log("Entidade cadastrada com sucesso!")
+
+					this.modalRef.hide();
+
+					this.salvo = true;
+					this.registrationSteps = 4;
+				} else {
+
+					//TODO - disparar alerta bootstrap
+					console.log("Erro ao cadastrar entidade!")
+				}
+
+			});
+
 	}
 
 	// test envio e-mail Cloud Functions firebase
