@@ -35,11 +35,11 @@ export class HomeComponent implements OnInit {
 		private authService: AuthService, private entidadeService: EntidadeService) {
 
 		this.formCadastro = new FormGroup({
-			cnpj: new FormControl(''),
+			cnpj: new FormControl('', [Validators.required]),
 			razaoSocial: new FormControl(''),
 			atividadePrincipal: new FormControl(''),
-			areaAtuacao: new FormControl(''),
-			sigla: new FormControl(''),
+			areaAtuacao: new FormControl('selecione', [Validators.required]),
+			sigla: new FormControl('', [Validators.required]),
 			nomeFantasia: new FormControl(''),
 			email: new FormControl('', [Validators.required, Validators.email]),
 			lat: new FormControl(''),
@@ -47,10 +47,10 @@ export class HomeComponent implements OnInit {
 			receita: new FormControl(''),
 			responsavel: new FormGroup({
 				uid: new FormControl(''),
-				nome: new FormControl(''),
+				nome: new FormControl('', [Validators.required]),
 				cpf: new FormControl(''),
 				emailResponsavel: new FormControl('', [Validators.required, Validators.email]),
-				senha: new FormControl('', [Validators.required]),
+				senha: new FormControl(''),
 				senhaOk: new FormControl('', [Validators.required])
 			})
 		});
@@ -69,7 +69,6 @@ export class HomeComponent implements OnInit {
 			//concat for google maps
 			const endereco = res['logradouro'] + ', ' + res['numero'] + ' - ' + res['bairro'] + ', ' + res['municipio'] + '-' + res['uf'];
 
-			this.formCadastro.controls['cnpj'].setValue(res['cnpj']);
 			this.formCadastro.controls['razaoSocial'].setValue(res['nome']);
 			this.formCadastro.controls['atividadePrincipal'].setValue(res['atividade_principal'][0].text);
 			this.formCadastro.controls['nomeFantasia'].setValue(res['fantasia']);
@@ -99,8 +98,11 @@ export class HomeComponent implements OnInit {
 	backStep() {
 		if (this.registrationSteps === 3) {
 			this.registrationSteps = 2;
+			console.log(this.formCadastro)
+			console.log(this.formCadastro.controls['areaAtuacao'].value)
 		} else if (this.registrationSteps === 2) {
-			this.formCadastro.value.cnpj = null;
+			this.formCadastro.reset();
+			this.formCadastro.controls['areaAtuacao'].setValue('selecione');
 			this.registrationSteps = 1;
 		}
 	}
@@ -114,7 +116,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	onSubmit() {
-
+console.log(this.formCadastro)
 		let email = this.formCadastro.controls['responsavel'].value['emailResponsavel'];
 		let senha = this.formCadastro.controls['responsavel'].value['senhaOk'];
 
