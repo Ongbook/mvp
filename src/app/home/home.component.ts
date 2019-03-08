@@ -1,13 +1,13 @@
 import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { NgForm, FormGroup, FormControl } from '@angular/forms';
-
-import { AngularFireDatabase } from '@angular/fire/database';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { BuscaCnpjService } from '../busca-cnpj.service';
 import { BuscaLatLngService } from '../busca-lat-lng.service';
 import { EnviaEmailService } from '../envia-email.service';
+import { EntidadeService } from '../entidade.service';
+import { AuthService } from '../auth.service';
 
 @Component({
 	selector: 'app-home',
@@ -31,43 +31,44 @@ export class HomeComponent implements OnInit {
 	public formCadastro: FormGroup;
 
 	constructor(private modalService: BsModalService, private BuscaCnpjService: BuscaCnpjService,
-		private BuscaLatLngService: BuscaLatLngService, private db: AngularFireDatabase, private EnviaEmailService: EnviaEmailService) {
+		private BuscaLatLngService: BuscaLatLngService, private EnviaEmailService: EnviaEmailService,
+		private authService: AuthService, private entidadeService: EntidadeService) {
 
-			this.formCadastro = new FormGroup({
-				cnpj: new FormControl(''),
-				razaoSocial: new FormControl(''),
-				atividadePrincipal: new FormControl(''),
-				areaAtuacao: new FormControl(''),
-				sigla: new FormControl(''),
-				nomeFantasia: new FormControl(''),
-				email: new FormControl(''),
-				lat: new FormControl(''),
-				lng: new FormControl(''),
-				receita: new FormControl(''),
-				responsavel: new FormGroup({
-					nome: new FormControl(''),
-					cpf: new FormControl(''),
-					email: new FormControl(''),
-					senha: new FormControl(''),
-					senhaOk: new FormControl('')
-				})
-			  });
-		 }
+		this.formCadastro = new FormGroup({
+			cnpj: new FormControl('', [Validators.required]),
+			razaoSocial: new FormControl(''),
+			atividadePrincipal: new FormControl(''),
+			areaAtuacao: new FormControl('selecione', [Validators.required]),
+			sigla: new FormControl('', [Validators.required]),
+			nomeFantasia: new FormControl(''),
+			email: new FormControl('', [Validators.required, Validators.email]),
+			lat: new FormControl(''),
+			lng: new FormControl(''),
+			receita: new FormControl(''),
+			responsavel: new FormGroup({
+				uid: new FormControl(''),
+				nome: new FormControl('', [Validators.required]),
+				cpf: new FormControl(''),
+				emailResponsavel: new FormControl('', [Validators.required, Validators.email]),
+				senha: new FormControl(''),
+				senhaOk: new FormControl('', [Validators.required])
+			})
+		});
+	}
 
-	ngOnInit() {}
+	ngOnInit() { this.registrationSteps == 2 }
 
 	public openModalEntityRegister(templateEntityRegister: TemplateRef<any>) {
 		this.modalRef = this.modalService.show(templateEntityRegister, { backdrop: 'static', keyboard: false });
 	}
 
-	findCnpj(value: any) {
+	buscaCnpj(value: any) {
 
 		this.BuscaCnpjService.getCnpj(value).subscribe((res) => {
 
 			//concat for google maps
 			const endereco = res['logradouro'] + ', ' + res['numero'] + ' - ' + res['bairro'] + ', ' + res['municipio'] + '-' + res['uf'];
 
-			this.formCadastro.controls['cnpj'].setValue(res['cnpj']);
 			this.formCadastro.controls['razaoSocial'].setValue(res['nome']);
 			this.formCadastro.controls['atividadePrincipal'].setValue(res['atividade_principal'][0].text);
 			this.formCadastro.controls['nomeFantasia'].setValue(res['fantasia']);
@@ -75,7 +76,7 @@ export class HomeComponent implements OnInit {
 			this.formCadastro.controls['receita'].setValue(res);
 
 			this.BuscaLatLngService.getlatlng(endereco).subscribe(data => {
-				
+
 				this.formCadastro.controls['lat'].setValue(data['results'][0].geometry.location.lat);
 				this.formCadastro.controls['lng'].setValue(data['results'][0].geometry.location.lng);
 
@@ -90,15 +91,18 @@ export class HomeComponent implements OnInit {
 
 		}, err => {
 			console.log(err);
-		});  
+		});
 
 	}
 
 	backStep() {
 		if (this.registrationSteps === 3) {
 			this.registrationSteps = 2;
+			console.log(this.formCadastro)
+			console.log(this.formCadastro.controls['areaAtuacao'].value)
 		} else if (this.registrationSteps === 2) {
-			this.formCadastro.value.cnpj = null;
+			this.formCadastro.reset();
+			this.formCadastro.controls['areaAtuacao'].setValue('selecione');
 			this.registrationSteps = 1;
 		}
 	}
@@ -112,16 +116,50 @@ export class HomeComponent implements OnInit {
 	}
 
 	onSubmit() {
+console.log(this.formCadastro)
+		let email = this.formCadastro.controls['responsavel'].value['emailResponsavel'];
+		let senha = this.formCadastro.controls['responsavel'].value['senhaOk'];
 
-		// gravando no database firebase
-		this.db.list('/entidades').push(
-			this.formCadastro.value
-		);
+		this.authService.criaUsuarioEntidade(email, senha)
+			.then((uid) => {
 
-		this.modalRef.hide();
+				if (uid == "erro" || undefined) {
+					//TODO - disparar alerta bootstrap
+					console.log("Erro ao criar usuário responsável!")
+				} else {
 
-		this.salvo = true;
-		this.registrationSteps = 4;
+					this.formCadastro.controls['responsavel'].get('uid').setValue(uid);
+					this.criaEntidade();
+				}
+
+			}).catch((err) => {
+				//TODO - disparar alerta bootstrap
+				console.log(err)
+			});
+	}
+
+	criaEntidade() {
+
+		this.entidadeService.criaEntidade(this.formCadastro)
+			.then((res) => {
+
+				if (res == 'sucesso') {
+
+					//TODO - disparar alerta bootstrap
+					console.log("Entidade cadastrada com sucesso!")
+
+					this.modalRef.hide();
+
+					this.salvo = true;
+					this.registrationSteps = 4;
+				} else {
+
+					//TODO - disparar alerta bootstrap
+					console.log("Erro ao cadastrar entidade!")
+				}
+
+			});
+
 	}
 
 	// test envio e-mail Cloud Functions firebase
