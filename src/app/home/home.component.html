@@ -81,30 +81,27 @@
 			</div>
 
 			<div class="form-group" *ngIf="registrationSteps == 2">
+				<small class="form-text">Razão Social</small>
 				<input type="text" formControlName="razaoSocial" name="razaoSocial" class="form-control form-control-sm"
 					id="razao-social" disabled>
-				<small class="form-text">Razão Social</small>
 			</div>
 
-			<!--<div class="form-group" *ngIf="registrationSteps == 2">
-					<input type="text" formControlName="atividadePrincipal" name="atividadePrincipal" class="form-control form-control-sm"
-					 id="atividade-principal" disabled>
-				</div>-->
-
 			<div class="form-group" *ngIf="registrationSteps == 2">
-				<input type="text" formControlName="nomeFantasia" name="nomeFantasia"
-					class="form-control font-weight-bold text-uppercase" id="nomeFantasia">
 				<small class="form-text">Nome fantasia</small>
+				<input type="text" formControlName="nomeFantasia" name="nomeFantasia"
+					class="form-control font-weight-bold text-uppercase" id="nomeFantasia" [ngClass]="aplicaCSSerro('nomeFantasia')">
+				<small class="invalid-feedback">Campo inválido</small>
 			</div>
 
 			<div class="form-group" *ngIf="registrationSteps == 2">
-				<input type="email" formControlName="email" name="email" class="form-control text-lowercase" id="email">
 				<small class="form-text">E-mail principal da ONG</small>
+				<input type="email" formControlName="email" name="email" class="form-control text-lowercase" id="email" [ngClass]="aplicaCSSerro('email')">
+				<small class="invalid-feedback">Campo inválido</small>
 			</div>
-
-			<!-- TODO: transformar em select -->
+			
 			<div class="form-group" *ngIf="registrationSteps == 2">
-				<select class="custom-select" formControlName="areaAtuacao" name="areaAtuacao" id="area-de-atuacao">
+				<small class="form-text">Área de atuação</small>
+				<select class="custom-select form-control" formControlName="areaAtuacao" name="areaAtuacao" id="area-de-atuacao" [ngClass]="validaSelecioneAreaAtuacao()">
 					<option value="selecione" selected="true" disabled="disabled">Selecione...</option>
 					<option value="Idosos">Idosos</option>
 					<option value="Crianças">Crianças</option>
@@ -122,7 +119,7 @@
 					<option value="Doação de Órgãos">Doação de Órgãos</option>
 					<option value="Outros">Outros</option>
 				</select>
-				<small class="form-text">Área de atuação</small>
+				<small class="invalid-feedback">Campo obrigatório</small>
 			</div>
 
 			<div *ngIf="registrationSteps == 2" style="height:135px;">
@@ -134,12 +131,12 @@
 					<span class="input-group-text" id="basic-addon3">ongbook.org/</span>
 				</div>
 				<input type="text" class="form-control" formControlName="sigla" name="sigla" id="sigla"
-					aria-describedby="basic-addon3" placeholder="Sigla da ONG" >
+					aria-describedby="basic-addon3" placeholder="Sigla da ONG" [ngClass]="aplicaCSSerro('sigla')">
+				<small class="invalid-feedback">Campo inválido</small>
 			</div>
 
+			<small *ngIf="registrationSteps == 3">Coordenador responsável</small>
 			<div class="jumbotron pt-3 pb-2 mb-0" *ngIf="registrationSteps == 3" formGroupName="responsavel">
-
-				<h6 *ngIf="registrationSteps == 3">Coordenador responsável</h6>
 
 				<!-- div class="input-group form-group" *ngIf="registrationSteps == 3">
 						<input type="text" id="cpf" formControlName="cpf" name="cpf" #buscaCpf class="form-control" placeholder="CPF"
@@ -151,12 +148,14 @@
 
 				<div class="form-group" *ngIf="registrationSteps == 3">
 					<input type="text" class="form-control" placeholder="Nome" formControlName="nome" name="nome"
-						id="nome">
+						id="nome" [ngClass]="aplicaCSSerroInputsResponsavel('nome')">
+					<small class="invalid-feedback">Campo inválido</small>
 				</div>
 
 				<div class="form-group" *ngIf="registrationSteps == 3">
 					<input type="email" class="form-control" placeholder="E-mail" formControlName="emailResponsavel"
-						name="emailResponsavel" id="emailResponsavel">
+						name="emailResponsavel" id="emailResponsavel" [ngClass]="aplicaCSSerroInputsResponsavel('emailResponsavel')">
+					<small class="invalid-feedback">Campo inválido</small>
 				</div>
 
 			<!--<div class="form-group" *ngIf="registrationSteps == 3">
@@ -166,7 +165,8 @@
 
 				<div class="form-group" *ngIf="registrationSteps == 3">
 					<input type="password" class="form-control" placeholder="Senha" formControlName="senhaOk"
-						name="senhaOk" id="senhaOk">
+						name="senhaOk" id="senhaOk" [ngClass]="aplicaCSSerroInputsResponsavel('senhaOk')">
+					<small class="invalid-feedback">Campo inválido</small>
 				</div>
 
 			</div>
@@ -203,7 +203,9 @@
 						(click)="backStep();">Voltar</button>
 					<button type="button" class="btn btn-sm btn-success" *ngIf="registrationSteps == 2"
 						(click)="nextStep();"
-						[disabled]="formCadastro.controls['areaAtuacao'].value == 'selecione'">Avançar</button>
+						[disabled]="formCadastro.controls['areaAtuacao'].value == 'selecione' 
+							|| !formCadastro.controls['email'].valid 
+							|| !formCadastro.controls['nomeFantasia'].valid">Avançar</button>
 					<button type="submit" class="btn btn-sm btn-success" *ngIf="registrationSteps == 3"
 						[disabled]="!formCadastro.valid">Cadastrar</button>
 					<small id="emailHelp" class="form-text text-muted text-right mt-2" style="font-size:10px"
