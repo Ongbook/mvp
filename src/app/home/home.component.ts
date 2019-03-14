@@ -27,6 +27,8 @@ export class HomeComponent implements OnInit {
 
 	public modalRef: BsModalRef;
 	public customPatterns = {'0': { pattern: new RegExp('\[0-9\]')}};
+	
+	//Validators.pattern(new RegExp('^1234$'))
 
 	public formCadastro: FormGroup;
 
@@ -39,19 +41,19 @@ export class HomeComponent implements OnInit {
 			razaoSocial: new FormControl(''),
 			atividadePrincipal: new FormControl(''),
 			areaAtuacao: new FormControl('selecione', [Validators.required]),
-			sigla: new FormControl('', [Validators.required]),
-			nomeFantasia: new FormControl(''),
+			sigla: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]),
+			nomeFantasia: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(125)]),
 			email: new FormControl('', [Validators.required, Validators.email]),
 			lat: new FormControl(''),
 			lng: new FormControl(''),
 			receita: new FormControl(''),
 			responsavel: new FormGroup({
 				uid: new FormControl(''),
-				nome: new FormControl('', [Validators.required]),
+				nome: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(125)]),
 				cpf: new FormControl(''),
 				emailResponsavel: new FormControl('', [Validators.required, Validators.email]),
 				senha: new FormControl(''),
-				senhaOk: new FormControl('', [Validators.required])
+				senhaOk: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(125)])
 			})
 		});
 	}
@@ -165,6 +167,24 @@ console.log(this.formCadastro)
 
 			});
 
+	}
+
+	validaSelecioneAreaAtuacao(){
+		return {
+			'is-invalid': this.formCadastro.get('areaAtuacao').touched && this.formCadastro.get('areaAtuacao').value == 'selecione'
+		}
+	}
+	
+	aplicaCSSerro(campo: string){
+		return {
+			'is-invalid': this.formCadastro.get(campo).touched && !this.formCadastro.get(campo).valid 
+		}
+	}
+
+	aplicaCSSerroInputsResponsavel(campo: string){
+		return {
+			'is-invalid': this.formCadastro.controls['responsavel'].get(campo).touched && !this.formCadastro.controls['responsavel'].get(campo).valid 
+		}
 	}
 
 	// test envio e-mail Cloud Functions firebase
