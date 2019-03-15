@@ -189,7 +189,6 @@ export class HomeComponent implements OnInit {
 	}
 
 	onSubmit() {
-
 		let email = this.formCadastro.controls['responsavel'].value['emailResponsavel'];
 		let senha = this.formCadastro.controls['responsavel'].value['senhaOk'];
 
