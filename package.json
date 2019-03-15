@@ -29,6 +29,7 @@
     "jquery": "^3.3.1",
     "js-marker-clusterer": "^1.0.0",
     "ngx-bootstrap": "^3.0.1",
+    "ngx-mask": "^7.6.5",
     "rxjs": "6.3.3",
     "zone.js": "~0.8.26"
   },

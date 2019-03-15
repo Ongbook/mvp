@@ -27,8 +27,6 @@ export class HomeComponent implements OnInit {
 
 	public modalRef: BsModalRef;
 	public customPatterns = {'0': { pattern: new RegExp('\[0-9\]')}};
-	
-	//Validators.pattern(new RegExp('^1234$'))
 
 	public formCadastro: FormGroup;
 
@@ -37,7 +35,7 @@ export class HomeComponent implements OnInit {
 		private authService: AuthService, private entidadeService: EntidadeService) {
 
 		this.formCadastro = new FormGroup({
-			cnpj: new FormControl('', [Validators.required]),
+			cnpj: new FormControl('', [Validators.required, Validators.pattern(new RegExp('^\\d{14}$'))]),
 			razaoSocial: new FormControl(''),
 			atividadePrincipal: new FormControl(''),
 			areaAtuacao: new FormControl('selecione', [Validators.required]),
@@ -64,9 +62,15 @@ export class HomeComponent implements OnInit {
 		this.modalRef = this.modalService.show(templateEntityRegister, { backdrop: 'static', keyboard: false });
 	}
 
-	buscaCnpj(value: any) {
+	buscaCnpj() {
 
-		this.BuscaCnpjService.getCnpj(value).subscribe((res) => {
+		let cnpj = this.formCadastro.controls['cnpj'].value;
+
+		this.BuscaCnpjService.getCnpj(cnpj).subscribe((res) => {
+
+			//TODO - Validar natureza juridica cnpj
+			//Validators.pattern(new RegExp('^399-9'))
+			//Validators.pattern(new RegExp('^306-9'))
 
 			//concat for google maps
 			const endereco = res['logradouro'] + ', ' + res['numero'] + ' - ' + res['bairro'] + ', ' + res['municipio'] + '-' + res['uf'];
@@ -100,8 +104,6 @@ export class HomeComponent implements OnInit {
 	backStep() {
 		if (this.registrationSteps === 3) {
 			this.registrationSteps = 2;
-			console.log(this.formCadastro)
-			console.log(this.formCadastro.controls['areaAtuacao'].value)
 		} else if (this.registrationSteps === 2) {
 			this.formCadastro.reset();
 			this.formCadastro.controls['areaAtuacao'].setValue('selecione');
@@ -118,7 +120,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	onSubmit() {
-console.log(this.formCadastro)
+		
 		let email = this.formCadastro.controls['responsavel'].value['emailResponsavel'];
 		let senha = this.formCadastro.controls['responsavel'].value['senhaOk'];
 

@@ -70,13 +70,14 @@
 
 			<div class="input-group form-group" *ngIf="registrationSteps == 1">
 
-				<input type="text" id="cnpj" formControlName="cnpj" maxlength="14" name="cnpj" #cnpj
+				<input type="text" id="cnpj" formControlName="cnpj" name="cnpj" 
 					class="form-control form-control-lg" placeholder="CNPJ - apenas números"
-					aria-describedby="basic-addon2">
+					aria-describedby="basic-addon2" maxlength="18" mask='00.000.000/0000-00'>
 
 				<div class="input-group-append">
-					<button class="btn btn-secondary" type="button" (click)="buscaCnpj(cnpj.value);"><i
-							class="fas fa-search"></i></button>
+					<button class="btn btn-secondary" type="button" (click)="buscaCnpj();"
+							[disabled]="!formCadastro.controls['cnpj'].valid">
+						<i class="fas fa-search"></i></button>
 				</div>
 			</div>
 
