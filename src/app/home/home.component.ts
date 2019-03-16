@@ -108,7 +108,12 @@ export class HomeComponent implements OnInit {
 	}
 
 	nextStep() {
-		this.registrationSteps = 3;
+		if (this.registrationSteps === 2) {
+			this.registrationSteps = 3;
+		}else if (this.registrationSteps === 3) {
+			this.registrationSteps = 4;
+		}
+		
 	}
 
 	toggleNavbar() {

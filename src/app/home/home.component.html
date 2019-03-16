@@ -58,21 +58,22 @@
 <ng-template #templateEntityRegister>
 
 	<div class="modal-header border-bottom-0 bg-light">
-		<h5 class="modal-title pull-left">Cadastrar Entidade Social</h5>
-		<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+		<h5 class="modal-title pull-left" *ngIf="registrationSteps != 4">Cadastrar Entidade Social</h5>
+		<h4 class="modal-title text-center" *ngIf="registrationSteps == 4">Entidade Social cadastrada com sucesso!</h4>
+		<button type="button" class="close pull-right" aria-label="Close" *ngIf="registrationSteps != 4"
+			(click)="modalRef.hide()">
 			<span aria-hidden="true">&times;</span>
 		</button>
 	</div>
 
 	<form [formGroup]="formCadastro" (ngSubmit)="onSubmit()">
 
-		<div class="modal-body bg-light" [ngClass]="{'pb-1': registrationSteps == 1}">
+		<div class="modal-body bg-light" *ngIf="registrationSteps != 4" [ngClass]="{'pb-1': registrationSteps == 1}">
 
 			<div class="input-group form-group" *ngIf="registrationSteps == 1">
 
 				<input type="text" id="cnpj" formControlName="cnpj" maxlength="14" name="cnpj" #cnpj
-					class="form-control form-control-lg" placeholder="CNPJ - apenas números"
-					aria-describedby="basic-addon2">
+					class="form-control form-control-lg" placeholder="CNPJ - apenas números" aria-describedby="basic-addon2">
 
 				<div class="input-group-append">
 					<button class="btn btn-secondary" type="button" (click)="buscaCnpj(cnpj.value);"><i
@@ -134,7 +135,7 @@
 					<span class="input-group-text" id="basic-addon3">ongbook.org/</span>
 				</div>
 				<input type="text" class="form-control" formControlName="sigla" name="sigla" id="sigla"
-					aria-describedby="basic-addon3" placeholder="Sigla da ONG" >
+					aria-describedby="basic-addon3" placeholder="Sigla da ONG">
 			</div>
 
 			<div class="jumbotron pt-3 pb-2 mb-0" *ngIf="registrationSteps == 3" formGroupName="responsavel">
@@ -150,8 +151,7 @@
 					</div -->
 
 				<div class="form-group" *ngIf="registrationSteps == 3">
-					<input type="text" class="form-control" placeholder="Nome" formControlName="nome" name="nome"
-						id="nome">
+					<input type="text" class="form-control" placeholder="Nome" formControlName="nome" name="nome" id="nome">
 				</div>
 
 				<div class="form-group" *ngIf="registrationSteps == 3">
@@ -159,14 +159,14 @@
 						name="emailResponsavel" id="emailResponsavel">
 				</div>
 
-			<!--<div class="form-group" *ngIf="registrationSteps == 3">
+				<!--<div class="form-group" *ngIf="registrationSteps == 3">
 					<input type="password" class="form-control" placeholder="Senha" formControlName="senha" name="senha"
 						id="senha">
 				</div> -->
 
 				<div class="form-group" *ngIf="registrationSteps == 3">
-					<input type="password" class="form-control" placeholder="Senha" formControlName="senhaOk"
-						name="senhaOk" id="senhaOk">
+					<input type="password" class="form-control" placeholder="Senha" formControlName="senhaOk" name="senhaOk"
+						id="senhaOk">
 				</div>
 
 			</div>
@@ -186,8 +186,7 @@
 
 		</div> <!-- end Modal body -->
 
-		<div class="modal-footer rounded-bottom bg-light border-top-0 py-0"
-			[ngClass]="{'pb-2': registrationSteps == 1}">
+		<div class="modal-footer rounded-bottom bg-light border-top-0 py-0" [ngClass]="{'pb-2': registrationSteps == 1}">
 
 			<!-- para próxima entrega.
 				<div class="col-6" *ngIf="registrationSteps == 1">
@@ -195,19 +194,21 @@
 				</div>
 				-->
 
-			<div class="text-right pr-0"
-				[ngClass]="{'col-6': registrationSteps == 1,'pl-0 col-12': registrationSteps != 1 }">
+			<div class="text-right pr-0" [ngClass]="{'col-6': registrationSteps == 1,'pl-0 col-12': registrationSteps != 1 }">
 				<div class="form-group mb-1">
 					<button type="button" class="btn btn-sm btn-outline-secondary mr-2"
-						*ngIf="registrationSteps != 1 && registrationSteps != 'step4'"
-						(click)="backStep();">Voltar</button>
-					<button type="button" class="btn btn-sm btn-success" *ngIf="registrationSteps == 2"
-						(click)="nextStep();"
+						*ngIf="registrationSteps != 1 && registrationSteps != 4" (click)="backStep();">Voltar</button>
+					<button type="button" class="btn btn-sm btn-success" *ngIf="registrationSteps == 2" (click)="nextStep();"
 						[disabled]="formCadastro.controls['areaAtuacao'].value == 'selecione'">Avançar</button>
-					<button type="submit" class="btn btn-sm btn-success" *ngIf="registrationSteps == 3"
-						[disabled]="!formCadastro.valid">Cadastrar</button>
+					<!-- <button type="submit" class="btn btn-sm btn-success" *ngIf="registrationSteps == 3"
+						[disabled]="!formCadastro.valid">Cadastrar</button> -->
+
+					<!-- SÓ PARA TESTE - CRIAR PASSO 4 -->
+					<button class="btn btn-sm btn-success" *ngIf="registrationSteps == 3" (click)="nextStep();">Passo 4</button>
+					<!-- End: SÓ PARA TESTE - CRIAR PASSO 4 -->
+
 					<small id="emailHelp" class="form-text text-muted text-right mt-2" style="font-size:10px"
-						*ngIf="registrationSteps != 1 && registrationSteps != 'step4'">Passo
+						*ngIf="registrationSteps != 1 && registrationSteps != 4">Passo
 						{{ registrationSteps }}/4.</small>
 				</div>
 			</div>
@@ -217,6 +218,19 @@
 		</div>
 
 	</form>
+
+	<!-- Passo 4 - Msg de cadastrado com sucesso -->
+	<div *ngIf="registrationSteps == 4" class="modal-body bg-light rounded-bottom">
+		<p class="text-center">E-mail de confirmação com os <b>dados de acesso</b> enviado para:</p>
+		<h5 class="text-center ">email@email.com.br</h5>
+		<div class="row d-flex ">
+			<i class="text-center my-4 mx-auto far fa-4x fa-envelope"></i>
+		</div>
+		<div class="col-md-12 mt-3 text-center">
+			<button class="btn btn-secondary btn-sm" (click)="modalRef.hide()">Fechar</button>
+		</div>
+	</div>
+	<!-- End: Passo 4 -->
 
 </ng-template>
 
