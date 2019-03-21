@@ -68,15 +68,19 @@
 
 		<div class="modal-body bg-light" [ngClass]="{'pb-1': registrationSteps == 1}">
 
+			<div class="alert alert-danger" role="alert" *ngIf="msgErro != ''">
+				{{ msgErro }}
+			</div>
+
 			<div class="input-group form-group" *ngIf="registrationSteps == 1">
 
-				<input type="text" id="cnpj" formControlName="cnpj" name="cnpj" 
+				<input type="text" id="cnpj" formControlName="cnpj" name="cnpj" autofocus 
 					class="form-control form-control-lg" placeholder="CNPJ - apenas números"
 					aria-describedby="basic-addon2" maxlength="18" mask='00.000.000/0000-00'>
 
 				<div class="input-group-append">
 					<button class="btn btn-secondary" type="button" (click)="buscaCnpj();"
-							[disabled]="!formCadastro.controls['cnpj'].valid">
+							[disabled]="!formCadastro.controls['cnpj'].valid || msgErro != ''">
 						<i class="fas fa-search"></i></button>
 				</div>
 			</div>

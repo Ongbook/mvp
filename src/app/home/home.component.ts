@@ -8,6 +8,7 @@ import { BuscaLatLngService } from '../busca-lat-lng.service';
 import { EnviaEmailService } from '../envia-email.service';
 import { EntidadeService } from '../entidade.service';
 import { AuthService } from '../auth.service';
+import { $ } from 'protractor';
 
 @Component({
 	selector: 'app-home',
@@ -24,9 +25,10 @@ export class HomeComponent implements OnInit {
 	registrationSteps: Number = 1;
 	labelStep: Number;
 	salvo: Boolean = false;
+	msgErro: String = '';
 
 	public modalRef: BsModalRef;
-	public customPatterns = {'0': { pattern: new RegExp('\[0-9\]')}};
+	public customPatterns = { '0': { pattern: new RegExp('\[0-9\]') } };
 
 	public formCadastro: FormGroup;
 
@@ -68,37 +70,93 @@ export class HomeComponent implements OnInit {
 
 		this.BuscaCnpjService.getCnpj(cnpj).subscribe((res) => {
 
-			//TODO - Validar natureza juridica cnpj
-			//Validators.pattern(new RegExp('^399-9'))
-			//Validators.pattern(new RegExp('^306-9'))
+			if (res['status'] === 'ERROR') {
 
-			//concat for google maps
-			const endereco = res['logradouro'] + ', ' + res['numero'] + ' - ' + res['bairro'] + ', ' + res['municipio'] + '-' + res['uf'];
+				this.msgErro = res['message'] + '.';
 
-			this.formCadastro.controls['razaoSocial'].setValue(res['nome']);
-			this.formCadastro.controls['atividadePrincipal'].setValue(res['atividade_principal'][0].text);
-			this.formCadastro.controls['nomeFantasia'].setValue(res['fantasia']);
-			this.formCadastro.controls['email'].setValue(res['email']);
-			this.formCadastro.controls['receita'].setValue(res);
+				this.aguardaMsgErro()
 
-			this.BuscaLatLngService.getlatlng(endereco).subscribe(data => {
+				return;
+			} else {
 
-				this.formCadastro.controls['lat'].setValue(data['results'][0].geometry.location.lat);
-				this.formCadastro.controls['lng'].setValue(data['results'][0].geometry.location.lng);
+				this.validaCNPJ(res);
 
-				this.registrationSteps = 2;
-
-				this.lat = data['results'][0].geometry.location.lat;
-				this.lng = data['results'][0].geometry.location.lng;
-
-			}, errr => {
-				console.log(errr);
-			});
+			}
 
 		}, err => {
 			console.log(err);
+			this.msgErro = 'Erro ao buscar CNPJ.'
+			this.aguardaMsgErro();
 		});
 
+	}
+
+	validaCNPJ(obj: any) {
+
+		let naturezaJuridica: String = obj['natureza_juridica'];
+
+		if (naturezaJuridica.match(new RegExp('^399-9')) ||
+			naturezaJuridica.match(new RegExp('^306-9'))) {
+
+			return this.verificaCnpjCadastrado(obj);
+
+		} else {
+
+			this.msgErro = "Natureza jurídica inválida.";
+
+			this.aguardaMsgErro();
+
+			return false;
+		}
+	}
+
+	async verificaCnpjCadastrado(obj: any) {
+
+		let cnpj: string = this.formCadastro.controls['cnpj'].value
+
+		await this.entidadeService.recuperaEntidadePorCnpj(cnpj)
+			.subscribe((res) => {
+
+				if (res[0] !== undefined) {
+
+					this.msgErro = "CNPJ já cadastrado.";
+
+					this.aguardaMsgErro();
+
+					return;
+				} else {
+
+					this.buscaLatitudeLongitude(obj);
+				}
+			});
+
+	}
+
+	async buscaLatitudeLongitude(obj: any) {
+		
+		const endereco = obj['logradouro'] + ', ' + obj['numero'] + ' - ' + obj['bairro'] + ', ' + obj['municipio'] + '-' + obj['uf'];
+
+		await this.BuscaLatLngService.getlatlng(endereco).subscribe(data => {
+
+			this.formCadastro.controls['razaoSocial'].setValue(obj['nome']);
+			this.formCadastro.controls['atividadePrincipal'].setValue(obj['atividade_principal'][0].text);
+			this.formCadastro.controls['nomeFantasia'].setValue(obj['fantasia']);
+			this.formCadastro.controls['email'].setValue(obj['email']);
+			this.formCadastro.controls['receita'].setValue(obj);
+
+			this.formCadastro.controls['lat'].setValue(data['results'][0].geometry.location.lat);
+			this.formCadastro.controls['lng'].setValue(data['results'][0].geometry.location.lng);
+
+			this.registrationSteps = 2;
+
+			this.lat = data['results'][0].geometry.location.lat;
+			this.lng = data['results'][0].geometry.location.lng;
+
+		}, errr => {
+			console.log(errr);
+			this.msgErro = 'Erro ao buscar CNPJ.'
+			this.aguardaMsgErro();
+		});
 	}
 
 	backStep() {
@@ -113,14 +171,25 @@ export class HomeComponent implements OnInit {
 
 	nextStep() {
 		this.registrationSteps = 3;
+		this.msgErro = '';
 	}
 
 	toggleNavbar() {
 		this.navbarOpen = !this.navbarOpen;
 	}
 
+	aguardaMsgErro() {
+
+		setTimeout(() => {
+
+			this.msgErro = '';
+
+		}, 4000);
+
+	}
+
 	onSubmit() {
-		
+
 		let email = this.formCadastro.controls['responsavel'].value['emailResponsavel'];
 		let senha = this.formCadastro.controls['responsavel'].value['senhaOk'];
 
@@ -166,21 +235,21 @@ export class HomeComponent implements OnInit {
 
 	}
 
-	validaSelecioneAreaAtuacao(){
+	validaSelecioneAreaAtuacao() {
 		return {
 			'is-invalid': this.formCadastro.get('areaAtuacao').touched && this.formCadastro.get('areaAtuacao').value == 'selecione'
 		}
 	}
-	
-	aplicaCSSerro(campo: string){
+
+	aplicaCSSerro(campo: string) {
 		return {
-			'is-invalid': this.formCadastro.get(campo).touched && !this.formCadastro.get(campo).valid 
+			'is-invalid': this.formCadastro.get(campo).touched && !this.formCadastro.get(campo).valid
 		}
 	}
 
-	aplicaCSSerroInputsResponsavel(campo: string){
+	aplicaCSSerroInputsResponsavel(campo: string) {
 		return {
-			'is-invalid': this.formCadastro.controls['responsavel'].get(campo).touched && !this.formCadastro.controls['responsavel'].get(campo).valid 
+			'is-invalid': this.formCadastro.controls['responsavel'].get(campo).touched && !this.formCadastro.controls['responsavel'].get(campo).valid
 		}
 	}
 
