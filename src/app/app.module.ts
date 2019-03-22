@@ -17,6 +17,8 @@ import { EntidadeService } from './entidade.service';
 import { AgmCoreModule } from '@agm/core';
 import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
 
+import {NgxMaskModule} from 'ngx-mask';
+
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -42,6 +44,7 @@ import { ModalEntityProfileComponent } from './maps/modal-entity-profile/modal-e
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgxMaskModule.forRoot(),
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
     ModalModule.forRoot(),
