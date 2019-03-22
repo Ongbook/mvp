@@ -1,46 +1,47 @@
 <div class="modal-header">
-  <h5 class="modal-title pull-left">{{fantasia}}</h5>
-  <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-
-<div class="modal-body">
-  <p class="text-center alert alert-warning">{{areaAtuacao}}</p>
-  <p>
-    <strong>
-      <small class="font-weight-bold">CNPJ:</small>
-    </strong> {{cnpj}}</p>
-  <p>
-    <strong>
-      <small class="font-weight-bold">Razão Social:</small>
-    </strong> {{razaoSocial}}</p>
-  <p style="padding-left:3.9em;text-indent:-3.9em;">
-    <strong>
-      <small class="font-weight-bold">Endereço:</small>
-    </strong> {{endereco}}
-    <span class="text-muted">{{cep}}</span>
-  </p>
-  <p>
-    <strong>
-      <small class="font-weight-bold">Telefone:</small>
-    </strong> {{telefone}}</p>
-  <p>
-    <strong>
-      <small class="font-weight-bold">E-mail:</small>
-    </strong>
-    <a href="mailto:{{email}}"> {{email}}</a>
-  </p>
-  <p>
-    <strong>
-      <small class="font-weight-bold">Presidente:</small>
-    </strong> {{presidente}}</p>
-  <p>
-    <strong>
-      <small class="font-weight-bold">Fundada em:</small>
-    </strong> {{anoFundacao}}</p>
-  <p>
-    <strong>
-      <small class="font-weight-bold">Coordenador responsável:</small>
-    </strong> {{anoFundacao}}</p>
-</div>
+    <h5 class="modal-title pull-left">{{fantasia}}</h5>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+  <div class="modal-body">
+    <small class="form-text">Área de atuação</small>
+    <p class="text-center alert alert-warning">{{areaAtuacao}}</p>
+    <p>
+      <strong>
+        <small class="font-weight-bold">CNPJ:</small>
+      </strong> {{cnpj}}</p>
+    <p style="padding-left:5.1em;text-indent:-5.1em;">
+      <strong>
+        <small class="font-weight-bold">Razão Social:</small>
+      </strong> {{razaoSocial}}</p>
+    <p style="padding-left:3.9em;text-indent:-3.9em;">
+      <strong>
+        <small class="font-weight-bold">Endereço:</small>
+      </strong> {{endereco}}
+      <span class="text-muted">{{cep}}</span>
+    </p>
+    <p>
+      <strong>
+        <small class="font-weight-bold">Telefone:</small>
+      </strong> {{telefone}}</p>
+    <p>
+      <strong>
+        <small class="font-weight-bold">E-mail:</small>
+      </strong>
+      <a href="mailto:{{email}}"> {{email}}</a>
+    </p>
+    <p style="padding-left:4.4em;text-indent:-4.4em;">
+      <strong>
+        <small class="font-weight-bold">Presidente:</small>
+      </strong> {{presidente}}</p>
+    <p>
+      <strong>
+        <small class="font-weight-bold">Fundada em:</small>
+      </strong> {{dtFundacao}}</p>
+    <p>
+      <strong>
+        <small class="font-weight-bold">Coordenador responsável:</small>
+      </strong> {{responsavel}}</p>
+  </div>
