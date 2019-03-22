@@ -28,4 +28,9 @@ export class EntidadeService {
     return this.db.list('/entidades', ref => ref.orderByChild("cnpj").equalTo(cnpj)).valueChanges();
   }
 
+  public recuperaEntidadePorSigla(sigla: string): any {
+
+    return this.db.list('/entidades', ref => ref.orderByChild("sigla").equalTo(sigla)).valueChanges();
+  }  
+
 }
