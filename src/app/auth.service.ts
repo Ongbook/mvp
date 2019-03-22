@@ -19,7 +19,7 @@ export class AuthService {
       }).catch((error) => {
 
         console.log(error);
-        return new Promise((resolve) => resolve("erro"))
+        return new Promise((resolve) => resolve(error))
       })
   }
 

@@ -8,7 +8,7 @@ import { BuscaLatLngService } from '../busca-lat-lng.service';
 import { EnviaEmailService } from '../envia-email.service';
 import { EntidadeService } from '../entidade.service';
 import { AuthService } from '../auth.service';
-import { $ } from 'protractor';
+import { Subject } from 'rxjs';
 
 @Component({
 	selector: 'app-home',
@@ -32,16 +32,21 @@ export class HomeComponent implements OnInit {
 
 	public formCadastro: FormGroup;
 
+	private subCnpj;
+	private subSigla;
+
 	constructor(private modalService: BsModalService, private BuscaCnpjService: BuscaCnpjService,
 		private BuscaLatLngService: BuscaLatLngService, private EnviaEmailService: EnviaEmailService,
 		private authService: AuthService, private entidadeService: EntidadeService) {
+
+		this.iniciaValidacaoSiglaCnpj();
 
 		this.formCadastro = new FormGroup({
 			cnpj: new FormControl('', [Validators.required, Validators.pattern(new RegExp('^\\d{14}$'))]),
 			razaoSocial: new FormControl(''),
 			atividadePrincipal: new FormControl(''),
 			areaAtuacao: new FormControl('selecione', [Validators.required]),
-			sigla: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]),
+			sigla: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(12)]),
 			nomeFantasia: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(125)]),
 			email: new FormControl('', [Validators.required, Validators.email]),
 			lat: new FormControl(''),
@@ -53,12 +58,12 @@ export class HomeComponent implements OnInit {
 				cpf: new FormControl(''),
 				emailResponsavel: new FormControl('', [Validators.required, Validators.email]),
 				senha: new FormControl(''),
-				senhaOk: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(125)])
+				senhaOk: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(125)])
 			})
 		});
 	}
 
-	ngOnInit() { this.registrationSteps == 2 }
+	ngOnInit() { }
 
 	public openModalEntityRegister(templateEntityRegister: TemplateRef<any>) {
 		this.modalRef = this.modalService.show(templateEntityRegister, { backdrop: 'static', keyboard: false });
@@ -110,33 +115,33 @@ export class HomeComponent implements OnInit {
 		}
 	}
 
-	async verificaCnpjCadastrado(obj: any) {
+	verificaCnpjCadastrado(obj: any) {
 
 		let cnpj: string = this.formCadastro.controls['cnpj'].value
 
-		await this.entidadeService.recuperaEntidadePorCnpj(cnpj)
+		this.subCnpj = this.entidadeService.recuperaEntidadePorCnpj(cnpj)
 			.subscribe((res) => {
 
 				if (res[0] !== undefined) {
 
 					this.msgErro = "CNPJ já cadastrado.";
-
 					this.aguardaMsgErro();
-
 					return;
+
 				} else {
 
 					this.buscaLatitudeLongitude(obj);
 				}
 			});
 
+
 	}
 
-	async buscaLatitudeLongitude(obj: any) {
-		
+	buscaLatitudeLongitude(obj: any) {
+
 		const endereco = obj['logradouro'] + ', ' + obj['numero'] + ' - ' + obj['bairro'] + ', ' + obj['municipio'] + '-' + obj['uf'];
 
-		await this.BuscaLatLngService.getlatlng(endereco).subscribe(data => {
+		this.BuscaLatLngService.getlatlng(endereco).subscribe(data => {
 
 			this.formCadastro.controls['razaoSocial'].setValue(obj['nome']);
 			this.formCadastro.controls['atividadePrincipal'].setValue(obj['atividade_principal'][0].text);
@@ -159,6 +164,30 @@ export class HomeComponent implements OnInit {
 		});
 	}
 
+	validaSigla() {
+
+		let sigla: String = this.formCadastro.controls['sigla'].value;
+
+		sigla = sigla.toLowerCase();
+
+		this.formCadastro.controls['sigla'].setValue(sigla);
+
+		this.subSigla = this.entidadeService.recuperaEntidadePorSigla(sigla.toString())
+			.subscribe((res) => {
+
+				if (res[0] !== undefined) {
+
+					this.msgErro = "Sigla já existente.";
+					this.aguardaMsgErro();
+					this.formCadastro.controls['sigla'].setErrors({ 'incorrect': true });
+
+				} else {
+
+					this.msgErro = "";
+				}
+			});
+	}
+
 	backStep() {
 		if (this.registrationSteps === 3) {
 			this.registrationSteps = 2;
@@ -167,11 +196,6 @@ export class HomeComponent implements OnInit {
 			this.formCadastro.controls['areaAtuacao'].setValue('selecione');
 			this.registrationSteps = 1;
 		}
-	}
-
-	nextStep() {
-		this.registrationSteps = 3;
-		this.msgErro = '';
 	}
 
 	toggleNavbar() {
@@ -183,9 +207,7 @@ export class HomeComponent implements OnInit {
 		setTimeout(() => {
 
 			this.msgErro = '';
-
 		}, 4000);
-
 	}
 
 	onSubmit() {
@@ -193,45 +215,68 @@ export class HomeComponent implements OnInit {
 		let senha = this.formCadastro.controls['responsavel'].value['senhaOk'];
 
 		this.authService.criaUsuarioEntidade(email, senha)
-			.then((uid) => {
+			.then((res) => {
 
-				if (uid == "erro" || undefined) {
-					//TODO - disparar alerta bootstrap
-					console.log("Erro ao criar usuário responsável!")
+				if (res['code'] == "auth/email-already-in-use") {
+
+					this.msgErro = "Este email já está em uso.";
+					this.aguardaMsgErro();
+					return;
+
+				} else if (res['code'] != undefined) {
+
+					this.msgErro = "Erro ao cadastrar responsável.";
+					this.aguardaMsgErro();
+					return;
+
 				} else {
-
-					this.formCadastro.controls['responsavel'].get('uid').setValue(uid);
+					this.msgErro = "";
+					this.formCadastro.controls['responsavel'].get('uid').setValue(res);
 					this.criaEntidade();
 				}
 
 			}).catch((err) => {
-				//TODO - disparar alerta bootstrap
+
+				this.msgErro = "Erro ao cadastrar responsável.";
+				this.aguardaMsgErro();
 				console.log(err)
 			});
 	}
 
 	criaEntidade() {
 
+		this.subCnpj.unsubscribe();
+		this.subSigla.unsubscribe();
+
 		this.entidadeService.criaEntidade(this.formCadastro)
 			.then((res) => {
 
 				if (res == 'sucesso') {
 
-					//TODO - disparar alerta bootstrap
-					console.log("Entidade cadastrada com sucesso!")
-
-					this.modalRef.hide();
-
 					this.salvo = true;
+					this.msgErro = "";
 					this.registrationSteps = 4;
+					return;
+
 				} else {
 
-					//TODO - disparar alerta bootstrap
-					console.log("Erro ao cadastrar entidade!")
+					this.msgErro = "Erro ao cadastrar entidade.";
+					this.aguardaMsgErro();
+					this.iniciaValidacaoSiglaCnpj();
 				}
 
+			}).catch((err) => {
+				this.msgErro = "Erro ao cadastrar entidade.";
+				this.aguardaMsgErro();
+				this.iniciaValidacaoSiglaCnpj();
+				console.log(err)
 			});
 
+	}
+
+	iniciaValidacaoSiglaCnpj() {
+		this.subCnpj = new Subject();
+		this.subSigla = new Subject();
 	}
 
 	validaSelecioneAreaAtuacao() {
