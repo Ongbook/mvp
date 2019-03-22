@@ -34,6 +34,7 @@ export class MapsComponent implements OnInit {
   @Input() email;
   @Input() presidente;
   @Input() dtFundacao;
+  @Input() responsavel;
 
   constructor(public db: AngularFireDatabase, private modalService: BsModalService) {
 
@@ -57,7 +58,7 @@ export class MapsComponent implements OnInit {
         this.markers.push({
           lat: data[i].lat,
           lng: data[i].lng,
-          dados: data[i].receita,
+          dados: data[i],
           draggable: false
         });
       }
@@ -71,7 +72,7 @@ export class MapsComponent implements OnInit {
     this.modalRef = this.modalService.show(ModalEntityProfileComponent);
 
     this.modalRef.content.fantasia = this.dataResponse[indexEntity].receita.fantasia;
-    this.modalRef.content.areaAtuacao = this.dataResponse[indexEntity].receita.atividade_principal[0].text;
+    this.modalRef.content.areaAtuacao = this.dataResponse[indexEntity].areaAtuacao;
     this.modalRef.content.cnpj = this.dataResponse[indexEntity].receita.cnpj;
     this.modalRef.content.razaoSocial = this.dataResponse[indexEntity].receita.nome;
     if (!this.dataResponse[indexEntity].receita.complemento) {
@@ -86,7 +87,7 @@ export class MapsComponent implements OnInit {
       this.modalRef.content.presidente = this.dataResponse[indexEntity].receita.qsa[0].nome;
     }
     this.modalRef.content.dtFundacao = this.dataResponse[indexEntity].receita.abertura;
-    //console.log(this.dataResponse[indexEntity]);
+    this.modalRef.content.responsavel = this.dataResponse[indexEntity].responsavel.nome;
   }
 
   clickedMarker(label: string, index: number) {
