@@ -167,9 +167,7 @@ export class HomeComponent implements OnInit {
 	validaSigla() {
 
 		let sigla: String = this.formCadastro.controls['sigla'].value;
-
 		sigla = sigla.toLowerCase();
-
 		this.formCadastro.controls['sigla'].setValue(sigla);
 
 		this.subSigla = this.entidadeService.recuperaEntidadePorSigla(sigla.toString())
@@ -213,6 +211,10 @@ export class HomeComponent implements OnInit {
 	onSubmit() {
 		let email = this.formCadastro.controls['responsavel'].value['emailResponsavel'];
 		let senha = this.formCadastro.controls['responsavel'].value['senhaOk'];
+		
+		let nomeFantasia: String = this.formCadastro.controls['nomeFantasia'].value;
+		nomeFantasia = nomeFantasia.toUpperCase();
+		this.formCadastro.controls['nomeFantasia'].setValue(nomeFantasia);
 
 		this.authService.criaUsuarioEntidade(email, senha)
 			.then((res) => {

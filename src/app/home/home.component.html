@@ -33,8 +33,7 @@
 			</ul>
 
 
-			<ul class="nav navbar-nav pt-3 pt-lg-0">
-
+			<ul class="nav navbar-nav pt-2 pt-lg-0">
 				<li class="nav-item pt-2 pt-lg-0">
 					<a class="nav-link text-warning alert-link" href="#" *ngIf="!salvo"
 						(click)="openModalEntityRegister(templateEntityRegister)">Cadastrar
@@ -77,11 +76,11 @@
 
 	<form [formGroup]="formCadastro" (ngSubmit)="onSubmit()">
 
-		<div class="alert alert-danger" role="alert" *ngIf="msgErro != ''">
+		<div class="alert alert-danger rounded-0" role="alert" *ngIf="msgErro != ''">
 			{{ msgErro }}
 		</div>
 
-		<div class="modal-body bg-light" *ngIf="registrationSteps != 4" [ngClass]="{'pb-1': registrationSteps == 1}">
+		<div class="modal-body bg-light pt-1" *ngIf="registrationSteps != 4" [ngClass]="{'pb-1': registrationSteps == 1}">
 
 			<div class="input-group form-group" *ngIf="registrationSteps == 1">
 
@@ -125,11 +124,13 @@
 					<option value="Idosos">Idosos</option>
 					<option value="Crianças">Crianças</option>
 					<option value="Animais">Animais</option>
-					<option value="Saúde">Saúde</option>
-					<option value="Educação">Educação</option>
-					<option value="Apoio a Mulheres">Apoio às Mulheres</option>
+					<option value="Saúde e Bem-estar">Saúde e Bem-estar</option>
+					<option value="Educação de Qualidade">Educação de Qualidade</option>
+					<option value="Apoio às Mulheres">Apoio às Mulheres</option>
 					<option value="Meio Ambiente">Meio Ambiente</option>
-					<option value="Combate a Pobreza">Combate à Pobreza</option>
+					<option value="Erradicação da Pobreza">Erradicação da Pobreza</option>
+					<option value="Geração de Renda">Geração de Renda</option>
+					<option value="Igualdade de Gênero">Igualdade de Gênero</option>
 					<option value="Esporte">Esporte</option>
 					<option value="Inovação Tecnológica">Inovação Tecnológica</option>
 					<option value="Cultura">Cultura</option>

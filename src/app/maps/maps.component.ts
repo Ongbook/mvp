@@ -71,7 +71,7 @@ export class MapsComponent implements OnInit {
     //console.log(indexEntity);
     this.modalRef = this.modalService.show(ModalEntityProfileComponent);
 
-    this.modalRef.content.fantasia = this.dataResponse[indexEntity].receita.fantasia;
+    this.modalRef.content.fantasia = this.dataResponse[indexEntity].nomeFantasia;
     this.modalRef.content.areaAtuacao = this.dataResponse[indexEntity].areaAtuacao;
     this.modalRef.content.cnpj = this.dataResponse[indexEntity].receita.cnpj;
     this.modalRef.content.razaoSocial = this.dataResponse[indexEntity].receita.nome;
@@ -82,7 +82,7 @@ export class MapsComponent implements OnInit {
     }
     this.modalRef.content.cep = this.dataResponse[indexEntity].receita.cep;
     this.modalRef.content.telefone = this.dataResponse[indexEntity].receita.telefone;
-    this.modalRef.content.email = this.dataResponse[indexEntity].receita.email;
+    this.modalRef.content.email = this.dataResponse[indexEntity].email;
     if (this.dataResponse[indexEntity].receita.qsa) {
       this.modalRef.content.presidente = this.dataResponse[indexEntity].receita.qsa[0].nome;
     }
