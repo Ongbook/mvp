@@ -1,12 +1,12 @@
-<div class="modal-header">
+<div class="modal-header border-bottom-0 bg-light">
     <h5 class="modal-title pull-left">{{fantasia}}</h5>
     <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   
-  <div class="modal-body">
-    <small class="form-text">Área de atuação</small>
+  <div class="modal-body pt-2">
+    <small class="text-muted">Área de atuação</small>
     <p class="text-center alert alert-warning">{{areaAtuacao}}</p>
     <p>
       <strong>
@@ -24,13 +24,13 @@
     </p>
     <p>
       <strong>
-        <small class="font-weight-bold">Telefone:</small>
-      </strong> {{telefone}}</p>
+        <small class="font-weight-bold">Telefone: </small>
+      </strong>{{telefone}}</p>
     <p>
       <strong>
-        <small class="font-weight-bold">E-mail:</small>
+        <small class="font-weight-bold">E-mail: </small>
       </strong>
-      <a href="mailto:{{email}}"> {{email}}</a>
+      <a href="mailto:{{email}}">{{email}}</a>
     </p>
     <p style="padding-left:4.4em;text-indent:-4.4em;">
       <strong>
