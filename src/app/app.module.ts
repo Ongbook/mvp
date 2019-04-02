@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -44,6 +44,7 @@ import { ModalEntityProfileComponent } from './maps/modal-entity-profile/modal-e
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    HttpClientJsonpModule,
     NgxMaskModule.forRoot(),
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
