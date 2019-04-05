@@ -11,7 +11,6 @@ export const environment = {
     storageBucket: "mvp-ongbook.appspot.com",
     messagingSenderId: "567014859840"
   },
-  receitaWsUrl: "https://receitaws.com.br/v1/cnpj",
   production: true
 };
 
