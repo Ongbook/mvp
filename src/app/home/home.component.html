@@ -13,6 +13,9 @@
 
 		<div class="collapse navbar-collapse" [ngClass]="{ 'show': navbarOpen }">
 			<ul class="nav navbar-nav mr-auto">
+				<li class="nav-item pt-2 pt-lg-0">
+					<a class="nav-link" href="#" *ngIf="!salvo" (click)="openModalSobre(templateSobre)">Sobre</a>
+				</li>
 				<!--
 				<li class="nav-item pt-2 pt-lg-0">
 					<a class="nav-link text-warning alert-link" href="#" *ngIf="!salvo"
@@ -32,9 +35,8 @@
 					-->
 			</ul>
 
-
-			<ul class="nav navbar-nav pt-2 pt-lg-0">
-				<li class="nav-item pt-2 pt-lg-0">
+			<ul class="nav navbar-nav pt-lg-0">
+				<li class="nav-item pt-lg-0">
 					<a class="nav-link text-warning alert-link" href="#" *ngIf="!salvo"
 						(click)="openModalEntityRegister(templateEntityRegister)">Cadastrar
 						ONG</a>
@@ -63,11 +65,37 @@
 <app-maps>
 </app-maps>
 
+<ng-template #templateSobre>
+
+	<div class="modal-header border-bottom-0 bg-light">
+		<h5 class="modal-title">Institucional</h5>
+		<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body py-1 bg-light text-justify">
+		<p class="text-muted">Catálogo de Entidades Sociais e suas necessidades, daquelas com as causas mais nobres do
+			planeta. Todas engajadas em prol dos <a title="Objetivos de Desenvolvimento Sustentável" target="_blank"
+				href="https://nacoesunidas.org/pos2015/agenda2030/">ODS</a>.</p>
+		<h6 class="text-center">Objetivo</h6>
+		<p class="text-muted">Cadastrar e listar Entidades Sociais e as necessidades destas, a fim de supri-las através da
+			interação social.</p>
+		<h6 class="text-center">Missão</h6>
+		<p class="text-muted">Servir novas tecnologias ao terceiro setor, evidenciando Entidades que trabalham para suprir
+			problemas sociais.</p>
+	</div>
+	<div class="modal-footer border-top-0 bg-light py-0">
+		<p><small>Mais informações <a title="Central Institucional" target="_blank"
+					href="https://central.ongbook.org">aqui</a>.</small></p>
+	</div>
+
+</ng-template>
+
 <ng-template #templateEntityRegister>
 
 	<div class="modal-header border-bottom-0 bg-light">
 		<h5 class="modal-title pull-left" *ngIf="registrationSteps != 4">Cadastrar Entidade Social</h5>
-		<h4 class="modal-title text-center" *ngIf="registrationSteps == 4">Entidade Social cadastrada com sucesso!</h4>
+		<h4 class="modal-title mx-auto" *ngIf="registrationSteps == 4">Seja muito bem vindo!</h4>
 		<button type="button" class="close pull-right" aria-label="Close" *ngIf="registrationSteps != 4"
 			(click)="modalRef.hide()">
 			<span aria-hidden="true">&times;</span>
@@ -84,9 +112,8 @@
 
 			<div class="input-group form-group" *ngIf="registrationSteps == 1">
 
-				<input type="text" id="cnpj" formControlName="cnpj" name="cnpj" autofocus
-					class="form-control form-control-lg" placeholder="CNPJ - apenas números"
-					aria-describedby="basic-addon2" maxlength="18" mask='00.000.000/0000-00'>
+				<input type="text" id="cnpj" formControlName="cnpj" name="cnpj" autofocus class="form-control form-control-lg"
+					placeholder="CNPJ - apenas números" aria-describedby="basic-addon2" maxlength="18" mask='00.000.000/0000-00'>
 
 				<div class="input-group-append">
 					<button class="btn btn-secondary" type="button" (click)="buscaCnpj();"
@@ -118,8 +145,8 @@
 
 			<div class="form-group" *ngIf="registrationSteps == 2">
 				<small class="form-text">Área de atuação</small>
-				<select class="custom-select form-control" formControlName="areaAtuacao" name="areaAtuacao"
-					id="area-de-atuacao" [ngClass]="validaSelecioneAreaAtuacao()">
+				<select class="custom-select form-control" formControlName="areaAtuacao" name="areaAtuacao" id="area-de-atuacao"
+					[ngClass]="validaSelecioneAreaAtuacao()">
 					<option value="selecione" selected="true" disabled="disabled">Selecione...</option>
 					<option value="Idosos">Idosos</option>
 					<option value="Crianças">Crianças</option>
@@ -168,8 +195,8 @@
 					</div -->
 
 				<div class="form-group" *ngIf="registrationSteps == 3">
-					<input type="text" class="form-control" placeholder="Nome" formControlName="nome" name="nome"
-						id="nome" [ngClass]="aplicaCSSerroInputsResponsavel('nome')">
+					<input type="text" class="form-control" placeholder="Nome" formControlName="nome" name="nome" id="nome"
+						[ngClass]="aplicaCSSerroInputsResponsavel('nome')">
 					<small class="invalid-feedback">Campo inválido</small>
 				</div>
 
@@ -186,8 +213,8 @@
 				</div> -->
 
 				<div class="form-group" *ngIf="registrationSteps == 3">
-					<input type="password" class="form-control" placeholder="Senha" formControlName="senhaOk"
-						name="senhaOk" id="senhaOk" [ngClass]="aplicaCSSerroInputsResponsavel('senhaOk')">
+					<input type="password" class="form-control" placeholder="Senha" formControlName="senhaOk" name="senhaOk"
+						id="senhaOk" [ngClass]="aplicaCSSerroInputsResponsavel('senhaOk')">
 					<small class="invalid-feedback">Campo inválido</small>
 				</div>
 
@@ -240,10 +267,10 @@
 
 	<!-- Passo 4 - Msg de cadastrado com sucesso -->
 	<div *ngIf="registrationSteps == 4" class="modal-body bg-light rounded-bottom">
-		<p class="text-center">E-mail de confirmação com os <b>dados de acesso</b> enviado para:</p>
-		<h5 class="text-center ">email@email.com.br</h5>
+		<p class="text-center">Estamos felizes por termos a oportunidade de servi-los.</p>
+		<p class="text-center">Em breve entraremos em contato oferencendo novas funcionalidades.</p>
 		<div class="row d-flex ">
-			<i class="text-center my-4 mx-auto far fa-4x fa-envelope"></i>
+			<i class="text-center my-3 mx-auto fa-4x fas fa-hand-holding-heart"></i>
 		</div>
 		<div class="col-md-12 mt-3 text-center">
 			<button class="btn btn-secondary btn-sm" (click)="modalRef.hide()">Fechar</button>
