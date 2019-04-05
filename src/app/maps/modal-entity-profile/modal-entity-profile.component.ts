@@ -21,6 +21,7 @@ export class ModalEntityProfileComponent implements OnInit {
   @Input() presidente;
   @Input() dtFundacao;
   @Input() anoFundacao;
+  @Input() responsavel;
 
   public modalClose: BsModalRef;
   /**
