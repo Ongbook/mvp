@@ -69,6 +69,10 @@ export class HomeComponent implements OnInit {
 		this.modalRef = this.modalService.show(templateEntityRegister, { backdrop: 'static', keyboard: false });
 	}
 
+	public openModalSobre(templateSobre: TemplateRef<any>) {
+		this.modalRef = this.modalService.show(templateSobre);
+	}
+
 	buscaCnpj() {
 
 		let cnpj = this.formCadastro.controls['cnpj'].value;
