@@ -1,5 +1,6 @@
-import { Injectable, NgModule } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 @Injectable({
 	providedIn: 'root'
@@ -7,28 +8,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export class BuscaCnpjService {
 
-	private url = '/v1/cnpj';
-	private uri: string;
-	private httpOptions;
-	
+	private url = "https://receitaws.com.br/v1/cnpj";
 
 	constructor(private http: HttpClient) { }
 
 	getCnpj(cnpj: any) {
 
-		this.uri = `${this.url}/${cnpj}`;
-		this.httpOptions = {
-			headers: new HttpHeaders({
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Origin': '*',
-				'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-				'Access-Control-Allow-Headers': 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
-			})
-		};
+		let url = `${this.url}/${cnpj}`;
 
-		console.log(this.uri);
-
-		return this.http.get(this.uri, this.httpOptions);
+		return this.http.jsonp(url, 'callback');
 	}
 
 }
