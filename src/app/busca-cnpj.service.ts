@@ -8,11 +8,13 @@ import { environment } from '../environments/environment';
 
 export class BuscaCnpjService {
 
+	private url = "https://receitaws.com.br/v1/cnpj";
+
 	constructor(private http: HttpClient) { }
 
 	getCnpj(cnpj: any) {
 
-		let url = `${environment.receitaWsUrl}/${cnpj}`;
+		let url = `${this.url}/${cnpj}`;
 
 		return this.http.jsonp(url, 'callback');
 	}
