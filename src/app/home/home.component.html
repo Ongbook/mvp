@@ -14,7 +14,7 @@
 		<div class="collapse navbar-collapse" [ngClass]="{ 'show': navbarOpen }">
 			<ul class="nav navbar-nav mr-auto">
 				<li class="nav-item pt-2 pt-lg-0">
-					<a class="nav-link" href="#" *ngIf="!salvo" (click)="openModalSobre(templateSobre)">Sobre</a>
+					<a class="nav-link" href="#" (click)="openModalSobre(templateSobre)">Sobre</a>
 				</li>
 				<!--
 				<li class="nav-item pt-2 pt-lg-0">
@@ -102,7 +102,7 @@
 		</button>
 	</div>
 
-	<form [formGroup]="formCadastro" (ngSubmit)="onSubmit()">
+	<form [formGroup]="formCadastro" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
 
 		<div class="alert alert-danger rounded-0" role="alert" *ngIf="msgErro != ''">
 			{{ msgErro }}
