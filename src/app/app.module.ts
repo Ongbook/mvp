@@ -50,7 +50,7 @@ import { ModalEntityProfileComponent } from './maps/modal-entity-profile/modal-e
     TooltipModule.forRoot(),
     ModalModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyAfTxzWAW7ExaxT4-Sa7o7MxXPeiY6656A',
+      apiKey: 'AIzaSyBlnVck-Tc2xx9RveTQAIyGSZNI5TSOpT4',
       libraries: ['places']
     }),
     AgmJsMarkerClustererModule,
