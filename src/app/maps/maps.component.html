@@ -1,3 +1,14 @@
+<!-- Msg sobre o maps -->
+<div class="position-absolute w-100 h-100 d-flex justify-content-center px-3 default"
+	style="z-index:1;background: rgba(0, 0, 0, 0.4);" *ngIf="!initializedMap" [ngClass]="{ fade: startFade }">
+	<div class="align-self-center">
+		<h1 id="text-over-map" class="text-center font-weight-bold mb-4" style="text-shadow:2px 2px 10px black;color:white;">Entidades Sociais a sua volta</h1>
+		<div class="col-md-12 text-center">
+			<button id="btn-over-map" class="btn btn-outline-warning alert-link" (click)="initMap()">CONHEÇA AGORA!</button>
+		</div>
+	</div>
+</div>
+
 <agm-map 
   [latitude]="lat"
   [longitude]="lng"

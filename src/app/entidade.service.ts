@@ -31,6 +31,11 @@ export class EntidadeService {
   public recuperaEntidadePorSigla(sigla: string): any {
 
     return this.db.list('/entidades', ref => ref.orderByChild("sigla").equalTo(sigla)).valueChanges();
-  }  
+  }
+  
+  public recuperaTodasEntidades(): any{
+
+    return this.db.list('/entidades').valueChanges();
+  }
 
 }

@@ -1,9 +1,12 @@
 import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable } from 'rxjs';
+
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { ModalEntityProfileComponent } from './modal-entity-profile/modal-entity-profile.component';
+
+import { EntidadeService } from '../entidade.service';
 
 @Component({
   selector: 'app-maps',
@@ -21,6 +24,8 @@ export class MapsComponent implements OnInit {
   markers: marker[] = [];
   iconUrl: string = "https://firebasestorage.googleapis.com/v0/b/mvp-ongbook.appspot.com/o/ongbook-marker.png?alt=media&token=54548289-eb45-41b9-aebf-0db0660c1570";
   dataResponse = [];
+  initializedMap = false;
+  startFade = false;
 
   public modalRef: BsModalRef;
 
@@ -36,34 +41,7 @@ export class MapsComponent implements OnInit {
   @Input() dtFundacao;
   @Input() responsavel;
 
-  constructor(public db: AngularFireDatabase, private modalService: BsModalService) {
-
-    this.entidades = db.list('entidades').valueChanges();
-
-    this.entidades.subscribe(data => {
-
-      this.dataResponse = [];
-      // passando o objeto para array
-      for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-          this.dataResponse.push(data[key]);
-        }
-      }
-
-      localStorage.setItem('listagem_completa', JSON.stringify(data));
-
-      this.markers = [];
-
-      for (let i = 0; i < this.dataResponse.length; i++) {
-        this.markers.push({
-          lat: data[i].lat,
-          lng: data[i].lng,
-          dados: data[i],
-          draggable: false
-        });
-      }
-    });
-  }
+  constructor(private entidadeService: EntidadeService, private modalService: BsModalService) { }
 
   ngOnInit() { }
 
@@ -88,6 +66,45 @@ export class MapsComponent implements OnInit {
     }
     this.modalRef.content.dtFundacao = this.dataResponse[indexEntity].receita.abertura;
     this.modalRef.content.responsavel = this.dataResponse[indexEntity].responsavel.nome;
+  }
+
+  initMap() {
+
+    this.startFade = true;
+
+    this.loadMarkers();
+    
+    setTimeout(() => {
+      this.initializedMap = true;
+    }, 2000);
+    
+  }
+
+  loadMarkers(){
+
+    this.entidadeService.recuperaTodasEntidades().subscribe(data => {
+
+      this.dataResponse = [];
+      // passando o objeto para array
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          this.dataResponse.push(data[key]);
+        }
+      }
+
+      this.markers = [];
+
+      for (let i = 0; i < this.dataResponse.length; i++) {
+        this.markers.push({
+          lat: data[i].lat,
+          lng: data[i].lng,
+          dados: data[i],
+          draggable: false
+        });
+      }
+
+    });
+
   }
 
   clickedMarker(label: string, index: number) {
