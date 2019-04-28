@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="position:fixed;z-index:99;width:100%;">
 	<div class="container">
-		<a class="ml-2 img-brand" href="">
-			<img id="logo"
+		<a href="">
+			<img
 				src="https://firebasestorage.googleapis.com/v0/b/mvp-ongbook.appspot.com/o/ongbook-marker.png?alt=media&token=54548289-eb45-41b9-aebf-0db0660c1570"
 				alt="Ongbook" style="width:33px">
 		</a>
@@ -18,11 +18,11 @@
 				</li>
 			</ul>
 
-			<ul class="nav navbar-nav pt-lg-0">
-				<li class="nav-item pt-lg-0">
-					<a class="nav-link text-dark alert-link btn btn-sm btn-warning" href="#" *ngIf="!salvo"
+			<ul class="nav navbar-nav pt-2 pt-lg-0">
+				<li class="nav-item">
+					<button class="text-dark alert-link btn btn-warning" *ngIf="!salvo"
 						(click)="openModalEntityRegister(templateEntityRegister)">Cadastrar
-						ONG</a>
+						ONG</button>
 				</li>
 
 				<!--<div class="dropdown">
@@ -102,7 +102,7 @@
 			<div class="form-group" *ngIf="registrationSteps == 2">
 				<small class="form-text">Razão Social</small>
 				<input type="text" formControlName="razaoSocial" name="razaoSocial" class="form-control form-control-sm"
-					id="razao-social" disabled>
+					id="razao-social">
 			</div>
 
 			<div class="form-group" *ngIf="registrationSteps == 2">
