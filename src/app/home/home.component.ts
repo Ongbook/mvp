@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
 
 		this.formCadastro = new FormGroup({
 			cnpj: new FormControl('', [Validators.required, Validators.pattern(new RegExp('^\\d{14}$'))]),
-			razaoSocial: new FormControl(''),
+			razaoSocial: new FormControl({value: '', disabled: true}),
 			atividadePrincipal: new FormControl(''),
 			areaAtuacao: new FormControl('selecione', [Validators.required]),
 			sigla: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(12)]),
@@ -147,6 +147,11 @@ export class HomeComponent implements OnInit {
 
 		this.BuscaLatLngService.getlatlng(endereco).subscribe(data => {
 
+			if (data['status'] != "OK") {
+				this.msgErro = "Erro ao buscar CNPJ.";
+				this.aguardaMsgErro();
+				return;
+			}
 			this.formCadastro.controls['razaoSocial'].setValue(obj['nome']);
 			this.formCadastro.controls['atividadePrincipal'].setValue(obj['atividade_principal'][0].text);
 			this.formCadastro.controls['nomeFantasia'].setValue(obj['fantasia']);
@@ -215,7 +220,7 @@ export class HomeComponent implements OnInit {
 	onSubmit() {
 		let email = this.formCadastro.controls['responsavel'].value['emailResponsavel'];
 		let senha = this.formCadastro.controls['responsavel'].value['senhaOk'];
-		
+
 		let nomeFantasia: String = this.formCadastro.controls['nomeFantasia'].value;
 		nomeFantasia = nomeFantasia.toUpperCase();
 		this.formCadastro.controls['nomeFantasia'].setValue(nomeFantasia);
