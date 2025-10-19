@@ -11,7 +11,7 @@ export class AuthService {
 
   public criaUsuarioEntidade(email: string, senha: string) {
 
-    return this.afAuth.auth.createUserWithEmailAndPassword(email, senha)
+    return this.afAuth.createUserWithEmailAndPassword(email, senha)
       .then((res) => {
 
         return new Promise((resolve) => resolve(res.user.uid))

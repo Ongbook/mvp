@@ -80,31 +80,20 @@ export class MapsComponent implements OnInit {
     
   }
 
-  loadMarkers(){
-
-    this.entidadeService.recuperaTodasEntidades().subscribe(data => {
-
-      this.dataResponse = [];
-      // passando o objeto para array
-      for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-          this.dataResponse.push(data[key]);
-        }
-      }
-
-      this.markers = [];
-
-      for (let i = 0; i < this.dataResponse.length; i++) {
-        this.markers.push({
-          lat: data[i].lat,
-          lng: data[i].lng,
-          dados: data[i],
-          draggable: false
+  loadMarkers() {
+    this.entidadeService.recuperaTodasEntidades().subscribe((data: any[]) => {
+      this.dataResponse = data; 
+      this.markers = this.dataResponse
+        .filter(entidade => entidade.lat && entidade.lng)
+        .map(entidade => {
+          return {
+            lat: entidade.lat,
+            lng: entidade.lng,
+            dados: entidade,
+            draggable: false
+          };
         });
-      }
-
     });
-
   }
 
   clickedMarker(label: string, index: number) {

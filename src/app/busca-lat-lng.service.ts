@@ -10,7 +10,7 @@ export class BuscaLatLngService {
 
 	getlatlng(address: string) {
 
-		return this.http.get('https://maps.googleapis.com/maps/api/geocode/json?&address=' + address + '&region=BR&key=AIzaSyBlnVck-Tc2xx9RveTQAIyGSZNI5TSOpT4');
+		return this.http.get('https://maps.googleapis.com/maps/api/geocode/json?&address=' + address + '&region=BR&key=AIzaSyDcgVxMPCP7yIPn2BWp5Oz1DrUN7AvS3r0');
 	}
 
 }

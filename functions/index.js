@@ -1,12 +1,3 @@
-//const functions = require('firebase-functions');
-
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
-
 'use strict';
 const functions = require('firebase-functions');
 const nodemailer = require('nodemailer');
@@ -23,7 +14,7 @@ let transporter = nodemailer.createTransport({
 });
 
 exports.enviarEmail = functions.https.onRequest((req, res) => {
-  cors(req, res, () => {
+  cors(req, res, async () => {
     let remetente = '"no" reply <no-reply@ongbook.org>';
 
     let assunto = req.body['assunto'];
@@ -39,14 +30,13 @@ exports.enviarEmail = functions.https.onRequest((req, res) => {
       html: corpoHtml
     };
 
-    transporter.sendMail(email, (error, info) => {
-      if (error) {
-        return console.log(error);
-      }
+    try {
+      const info = await transporter.sendMail(email);
       console.log('Mensagem %s enviada: %s', info.messageId, info.response, ' Para: ', email.to);
-    });
-
-    res.end();
-
+      res.status(200).send({ status: 'Email sent', info: info });
+    } catch (error) {
+      console.error('Error sending email: ', error);
+      res.status(500).send({ status: 'Error', error: error.message });
+    }
   });
 });
