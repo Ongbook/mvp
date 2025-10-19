@@ -27,6 +27,32 @@ export class MapsComponent implements OnInit {
   initializedMap = false;
   startFade = false;
 
+  selectedMarker: marker | null = null;
+  selectedIndex: number | null = null;
+
+  isInfoWindowOpen: boolean = false;
+
+  mapStyles = [
+    { featureType: 'poi.business', stylers: [{ visibility: 'off' }] },
+    { featureType: 'poi.attraction', stylers: [{ visibility: 'off' }] },
+    { featureType: 'poi.government', stylers: [{ visibility: 'off' }] },
+    { featureType: 'poi.medical', stylers: [{ visibility: 'off' }] },
+    { featureType: 'poi.park', stylers: [{ visibility: 'off' }] },
+    { featureType: 'poi.place_of_worship', stylers: [{ visibility: 'off' }] },
+    { featureType: 'poi.school', stylers: [{ visibility: 'off' }] },
+    { featureType: 'poi.sports_complex', stylers: [{ visibility: 'off' }] },
+  ];
+
+  mapOptions: google.maps.MapOptions = {
+    mapTypeId: 'roadmap',
+    disableDoubleClickZoom: true,
+    minZoom: 3,
+    maxZoom: 16,
+    streetViewControl: false,
+    fullscreenControl: false,
+    mapTypeControl: false,
+  };
+
   public modalRef: BsModalRef;
 
   @Input() fantasia;
@@ -96,8 +122,19 @@ export class MapsComponent implements OnInit {
     });
   }
 
-  clickedMarker(label: string, index: number) {
-    //console.log(`clicked the marker: ${label || index}`);
+  clickedMarker(marker: marker, index: number) {
+    this.selectedMarker = marker;
+    this.selectedIndex = index;
+    this.isInfoWindowOpen = true; // Open the info window
+  }
+
+  closeInfoWindow() {
+    this.selectedMarker = null;
+    this.isInfoWindowOpen = false; // Close the info window
+  }
+
+  onMapReady(map: google.maps.Map) {
+    map.setOptions(this.mapOptions);
   }
 
 }

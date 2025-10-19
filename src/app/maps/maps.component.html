@@ -9,29 +9,38 @@
 	</div>
 </div>
 
-<agm-map 
+<agm-map
   [latitude]="lat"
   [longitude]="lng"
   [zoom]="zoom"
-  [disableDefaultUI]="false">
+  [disableDefaultUI]="false"
+  [styles]="mapStyles"
+  (mapReady)="onMapReady($event)"
+  (mapClick)="closeInfoWindow()">
 
   <agm-marker-cluster imagePath="https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclustererplus/images/m">
-    <agm-marker 
+    <agm-marker
         *ngFor="let m of markers; let i = index"
-        (markerClick)="clickedMarker(m.label, i)"
+        (markerClick)="clickedMarker(m, i)"
         [latitude]="m.lat"
         [longitude]="m.lng"
         [label]="m.label"
         [markerDraggable]="m.draggable"
         [iconUrl]="iconUrl">
-
-      <agm-info-window>
-        <h6 style="max-width:300px;"><a href="#" (click)="openModalEntityProfile(i)">{{m.dados.nomeFantasia}}</a></h6>
-        <p style="max-width:300px;"><strong>{{m.dados.areaAtuacao}}</strong></p>
-      </agm-info-window>
-
     </agm-marker>
 
   </agm-marker-cluster>
+
+        <agm-info-window 
+          *ngIf="selectedMarker"
+          [latitude]="selectedMarker.lat" 
+          [longitude]="selectedMarker.lng"
+          [isOpen]="isInfoWindowOpen"
+          (infoWindowClose)="closeInfoWindow()">      <div style="padding-right:25px;">
+        <h6 style="visibility:hidden;">{{selectedMarker.dados.nomeFantasia}}</h6>
+        <h6 style="margin-top:-60px; margin-bottom:4px; position:absolute;"><a href="#" (click)="openModalEntityProfile(selectedIndex)">{{selectedMarker.dados.nomeFantasia}}</a></h6>
+        <p style="margin-top:-26px;"><strong>{{selectedMarker.dados.areaAtuacao}}</strong></p>
+      </div>
+  </agm-info-window>
 
 </agm-map>

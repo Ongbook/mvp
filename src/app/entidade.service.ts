@@ -38,7 +38,7 @@ export class EntidadeService {
 
     return this.db.list('/entidades').snapshotChanges().pipe(
       map(changes =>
-        changes.map(c => ({ key: c.payload.key, ...c.payload.val() as {} }))
+        changes.map(c => ({ key: c.key, ...c.payload.val() as {} }))
       )
     );
   }
