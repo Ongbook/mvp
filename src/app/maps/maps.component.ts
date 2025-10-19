@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, TemplateRef } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -99,16 +98,16 @@ export class MapsComponent implements OnInit {
     this.startFade = true;
 
     this.loadMarkers();
-    
+
     setTimeout(() => {
       this.initializedMap = true;
     }, 2000);
-    
+
   }
 
   loadMarkers() {
     this.entidadeService.recuperaTodasEntidades().subscribe((data: any[]) => {
-      this.dataResponse = data; 
+      this.dataResponse = data;
       this.markers = this.dataResponse
         .filter(entidade => entidade.lat && entidade.lng)
         .map(entidade => {

@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "export NODE_OPTIONS=--openssl-legacy-provider && ng serve --proxy-config proxyconfig.json",
-    "build": "export NODE_OPTIONS=--openssl-legacy-provider && ng build --proxy-config proxyconfig.json",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider && ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
